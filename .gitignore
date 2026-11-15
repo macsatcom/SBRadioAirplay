@@ -1,0 +1,6 @@
+third_party/*/
+build/toolchains/
+build/out/
+build/work/
+build/host/
+.superpowers/
