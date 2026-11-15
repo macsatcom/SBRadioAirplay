@@ -67,15 +67,27 @@ receiver (mDNS port 5353 sharing on kernel 2.6.26, which has no
 
 | Check | Radio (baby) | Touch (fab4) |
 |---|---|---|
-| Kernel (`uname -r`) | | |
-| Binary starts, `READY` line | | |
-| B. automated stream test | | |
+| Kernel (`uname -r`) | 2.6.26.8-rt16 (SqueezeOS 9.0.1 r17084) | |
+| Binary starts, `READY` line | yes | |
+| B. automated stream test | passed | |
 | Speaker visible on iPhone | | |
 | Captured audio sounds right | | |
-| RSS while streaming (kB) | | |
-| CPU % while streaming | | |
+| RSS while streaming (kB) | 5328 (152 idle) | |
+| CPU % while streaming | ~20 % steady (RTP/decode ~15 %, HTTP ~5 %); idle ~0 % | |
 | Spotify Connect started first: both visible | | |
 | Receiver started first: both visible | | |
 | Ctrl-C / SIGTERM exits cleanly | | |
 
 Notes:
+
+- Radio, 2026-11-15: free memory 8–9 MB with Spotify Connect running, so memory
+  is not a constraint. librespot idles at 0 % CPU.
+- Session setup costs about 4 s of CPU in the RTSP thread: the RSA-2048
+  private-key operations (Apple-Challenge and AES key) in wolfSSL built
+  without ARM assembly. The connection takes about 1.4 s, and the system sits
+  near 100 % during that burst. Candidate fix: wolfSSL `--enable-sp
+  --enable-sp-math` and/or cache the parsed key.
+- Whole system was 83 % busy while streaming with an HTTP listener, which
+  includes SSH and curl serving overhead from the test itself. Two of six
+  earlier runs had audible gaps (16 ms and 96 ms); these overlapped with
+  measurement scripts running on the device.

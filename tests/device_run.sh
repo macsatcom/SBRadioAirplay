@@ -27,7 +27,7 @@ upload() {
 }
 
 stop_remote() {
-    rsh 'kill $(ps | grep "[/]tmp/airplay-receiver" | awk "{print \$1}") 2>/dev/null; true'
+    rsh 'killall airplay-receiver 2>/dev/null; sleep 1; killall -9 airplay-receiver 2>/dev/null; true'
 }
 
 case "$MODE" in
@@ -35,7 +35,7 @@ test)
     upload
     stop_remote
     RECEIVER="ssh $SSH_OPTS root@$DEV /tmp/airplay-receiver" IP="$DEV" \
-        CLEANUP_CMD="ssh $SSH_OPTS root@$DEV 'kill \$(ps | grep \"[/]tmp/airplay-receiver\" | awk \"{print \\\$1}\") 2>/dev/null; true'" \
+        CLEANUP_CMD="ssh $SSH_OPTS root@$DEV 'killall airplay-receiver 2>/dev/null; true' </dev/null" \
         sh "$ROOT/tests/test_host_stream.sh"
     ;;
 run)
@@ -47,10 +47,12 @@ run)
     rsh "/tmp/airplay-receiver --name '$NAME' --ip $DEV --codec wav -d 3" || true
     ;;
 measure)
-    rsh 'p=$(ps | grep "[/]tmp/airplay-receiver" | awk "{print \$1}" | head -1);
+    rsh 'p=$(pidof airplay-receiver | cut -d" " -f1);
          [ -n "$p" ] || { echo "not running"; exit 1; }
          grep -E "VmRSS|VmSize|Threads" /proc/$p/status;
-         top -b -n 1 | grep -E "airplay|^CPU|jive|squeezeplay" | head -5'
+         a=$(cut -d" " -f14,15 /proc/$p/stat); sleep 5; b=$(cut -d" " -f14,15 /proc/$p/stat);
+         set -- $a $b; echo "CPU over 5 s: $(( ($3 + $4 - $1 - $2) * 100 / 500 ))%";
+         free | sed -n 2p'
     ;;
 *)
     echo "mode: test|run|measure" >&2; exit 2 ;;
