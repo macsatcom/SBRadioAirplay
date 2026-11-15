@@ -1,0 +1,38 @@
+--- a/src/raop_streamer.c	2026-11-15 15:45:11.983593170 +0100
++++ b/src/raop_streamer.c	2026-11-15 15:45:11.987954642 +0100
+@@ -37,6 +37,8 @@
+ #define GAP_COUNT	20
+ 
+ extern log_level 	raop_loglevel;
++
++bool raopst_http_loopback = false;
+ static log_level 	*loglevel = &raop_loglevel;
+ 
+ // #define __RTP_STORE
+@@ -276,10 +278,12 @@
+ 		LOG_INFO("[%p]: UDP port-%d %hu", ctx, i, ctx->rtp_sockets[i].lport);
+ 	}
+ 
+-	// create http port and start listening
++	// create http port and start listening; loopback unless the owner wants it on the LAN
++	struct in_addr http_host = ctx->host;
++	if (raopst_http_loopback) http_host.s_addr = htonl(INADDR_LOOPBACK);
+ 	do {
+ 		resp.hport = port_base + ((port.offset + port.count++) % port_range);
+-		ctx->http_listener = bind_socket(ctx->host, &resp.hport, SOCK_STREAM);
++		ctx->http_listener = bind_socket(http_host, &resp.hport, SOCK_STREAM);
+ 	} while (ctx->http_listener < 0 && port.count < port_range);
+ 
+ 	int i = 128*1024;
+--- a/src/raop_streamer.h	2026-11-15 15:45:11.985181994 +0100
++++ b/src/raop_streamer.h	2026-11-15 15:45:11.988091163 +0100
+@@ -19,6 +19,9 @@
+ 
+ typedef enum { RAOP_STREAMER_PLAY } raopst_event_t;
+ 
++// bind the HTTP audio server to 127.0.0.1 instead of the RAOP host address
++extern bool raopst_http_loopback;
++
+ typedef	void (*raopst_cb_t)(void *owner, raopst_event_t event);
+ 
+ raopst_resp_t 	raopst_init(struct in_addr host, struct in_addr peer, char *codec, bool metadata,

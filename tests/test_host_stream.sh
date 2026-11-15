@@ -19,7 +19,7 @@ cleanup() { [ -n "${CLEANUP_CMD:-}" ] && sh -c "$CLEANUP_CMD"; kill "$PID" 2>/de
 fail() { echo "FAIL $*"; tail -20 "$LOG"; cleanup; exit 1; }
 
 # shellcheck disable=SC2086
-$RECEIVER --name "$NAME" --ip "$IP" --codec wav > "$LOG" 2>&1 &
+$RECEIVER --name "$NAME" --ip "$IP" --codec wav --http-lan > "$LOG" 2>&1 &
 PID=$!
 i=0
 until grep -q "^READY" "$LOG"; do

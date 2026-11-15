@@ -7,7 +7,8 @@
 void ar_usage(const char *prog) {
 	fprintf(stderr,
 		"usage: %s [--name <speaker name>] [--ip <ipv4>] [--codec pcm|wav]\n"
-		"          [--ports <base>:<range>] [-d <0..5>] [--help]\n", prog);
+		"          [--ports <base>:<range>] [--state-dir <dir>] [--http-lan]\n"
+		"          [-d <0..5>] [--help]\n", prog);
 }
 
 static int parse_ports(const char *s, unsigned short *base, unsigned short *range) {
@@ -33,12 +34,16 @@ int ar_parse_args(int argc, char **argv, ar_args_t *out) {
 	for (int i = 1; i < argc; i++) {
 		const char *opt = argv[i];
 		if (!strcmp(opt, "--help") || !strcmp(opt, "-h")) return 1;
+		if (!strcmp(opt, "--http-lan")) { out->http_lan = true; continue; }
 		if (i + 1 >= argc) return -1;
 		const char *val = argv[++i];
 
 		if (!strcmp(opt, "--name")) {
 			if (!*val || strlen(val) >= sizeof(out->name)) return -1;
 			strcpy(out->name, val);
+		} else if (!strcmp(opt, "--state-dir")) {
+			if (!*val || strlen(val) >= sizeof(out->state_dir)) return -1;
+			strcpy(out->state_dir, val);
 		} else if (!strcmp(opt, "--codec")) {
 			if (strcmp(val, "pcm") && strcmp(val, "wav")) return -1;
 			strcpy(out->codec, val);

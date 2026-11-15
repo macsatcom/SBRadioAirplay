@@ -17,12 +17,26 @@
 #include "cross_net.h"
 #include "mdnssvc.h"
 #include "raop_server.h"
+#include "raop_streamer.h"
+#include "state_files.h"
 #include "args.h"
 
 log_level raop_loglevel = lWARN;
 log_level util_loglevel = lWARN;
 
 static struct in_addr host;
+static const char *state_dir;
+static unsigned stream_generation;
+
+static void state(const char *name, const char *fmt, ...) {
+	char buf[1024];
+	va_list ap;
+	if (!state_dir) return;
+	va_start(ap, fmt);
+	vsnprintf(buf, sizeof(buf), fmt, ap);
+	va_end(ap);
+	if (sf_write(state_dir, name, buf)) fprintf(stderr, "cannot write state file %s\n", name);
+}
 
 static void event(const char *fmt, ...) {
 	va_list ap;
@@ -35,6 +49,16 @@ static void event(const char *fmt, ...) {
 
 static const char *nz(const char *s) { return s ? s : ""; }
 
+/* metadata file is line-based: keep each field on one line */
+static const char *oneline(const char *s) {
+	static char bufs[3][256];
+	static int n;
+	char *b = bufs[n++ % 3];
+	snprintf(b, sizeof(bufs[0]), "%s", nz(s));
+	for (char *p = b; *p; p++) if (*p == '\n' || *p == '\r') *p = ' ';
+	return b;
+}
+
 static void raop_cb(void *owner, raopsr_event_t ev, ...) {
 	va_list ap;
 	(void)owner;
@@ -42,19 +66,26 @@ static void raop_cb(void *owner, raopsr_event_t ev, ...) {
 	switch (ev) {
 	case RAOP_STREAM: {
 		unsigned port = va_arg(ap, uint32_t);
-		event("STREAM port=%u url=http://%s:%u/stream", port, inet_ntoa(host), port);
+		event("STREAM port=%u url=http://%s:%u/stream", port,
+			  raopst_http_loopback ? "127.0.0.1" : inet_ntoa(host), port);
+		state("stream", "%u %u\n", ++stream_generation, port);
+		state("state", "playing\n");
 		break;
 	}
-	case RAOP_PLAY:  event("PLAY"); break;
-	case RAOP_PAUSE: event("PAUSE"); break;
-	case RAOP_FLUSH: event("FLUSH"); break;
-	case RAOP_STOP:  event("STOP"); break;
-	case RAOP_VOLUME:
-		event("VOLUME %.3f", va_arg(ap, double));
+	case RAOP_PLAY:  event("PLAY"); state("state", "playing\n"); break;
+	case RAOP_PAUSE: event("PAUSE"); state("state", "flushed\n"); break;
+	case RAOP_FLUSH: event("FLUSH"); state("state", "flushed\n"); break;
+	case RAOP_STOP:  event("STOP"); state("state", "stopped\n"); break;
+	case RAOP_VOLUME: {
+		double v = va_arg(ap, double);
+		event("VOLUME %.3f", v);
+		state("volume", "%.3f\n", v < 0 ? 0.0 : v > 1 ? 1.0 : v);
 		break;
+	}
 	case RAOP_METADATA: {
 		raopsr_metadata_t *m = va_arg(ap, raopsr_metadata_t *);
 		event("METADATA title=%s\tartist=%s\talbum=%s", nz(m->title), nz(m->artist), nz(m->album));
+		state("metadata", "%s\n%s\n%s\n", oneline(m->title), oneline(m->artist), oneline(m->album));
 		break;
 	}
 	case RAOP_ARTWORK: {
@@ -76,6 +107,15 @@ int main(int argc, char **argv) {
 	}
 
 	raop_loglevel = util_loglevel = (log_level)args.log_level;
+	raopst_http_loopback = !args.http_lan;
+	if (args.state_dir[0]) {
+		if (sf_init(args.state_dir)) {
+			fprintf(stderr, "cannot create state dir %s\n", args.state_dir);
+			return 1;
+		}
+		state_dir = args.state_dir;
+		state("state", "stopped\n");
+	}
 
 	/* Block before creating threads so only sigwait sees them. */
 	sigset_t set;
