@@ -1,0 +1,22 @@
+diff --git a/src/raop_streamer.c b/src/raop_streamer.c
+index 178295c..b566666 100644
+--- a/src/raop_streamer.c
++++ b/src/raop_streamer.c
+@@ -240,6 +240,17 @@ raopst_resp_t raopst_init(struct in_addr host, struct in_addr peer, char *codec,
+ 	memset(fmtp, 0, sizeof(fmtp));
+ 	for (int i = 0; (arg = strsep(&fmtpstr, " \t")); i++) fmtp[i] = atoi(arg);
+ 
++	// only ALAC is supported: without a valid fmtp there is no frame size
++	if (fmtp[1] <= 0 || !ctx->encoder) {
++		LOG_ERROR("[%p]: unsupported stream (no ALAC fmtp or bad codec)", ctx);
++		encoder_delete(ctx->encoder);
++		pthread_mutex_destroy(&ctx->ab_mutex);
++		pthread_mutex_destroy(&ctx->http_mutex);
++		free(ctx->http_cache);
++		free(ctx);
++		return resp;
++	}
++
+ 	ctx->frame_size = fmtp[1];
+ 	ctx->silence_frame = (char*) calloc(ctx->frame_size, 4);
+ 	if ((p = strchr(latencies, ':')) != NULL) {

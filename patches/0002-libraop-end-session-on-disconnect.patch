@@ -1,0 +1,89 @@
+diff --git a/src/raop_server.c b/src/raop_server.c
+index a55f617..3cb9e21 100644
+--- a/src/raop_server.c
++++ b/src/raop_server.c
+@@ -70,6 +70,7 @@ static log_level 	*loglevel = &raop_loglevel;
+ 
+ static void*	rtsp_thread(void *arg);
+ static bool 	handle_rtsp(raopsr_t *ctx, int sock);
++static void	session_end(raopsr_t *ctx);
+ 
+ static char*	rsa_apply(unsigned char *input, int inlen, int *outlen, int mode);
+ static int  	base64_pad(char *src, char **padded);
+@@ -374,6 +375,7 @@ static void *rtsp_thread(void *arg) {
+ 			closesocket(sock);
+ 			LOG_INFO("RTSP close %u", sock);
+ 			sock = -1;
++			if (ctx->ht) session_end(ctx);
+ 			continue;
+ 		}
+ 
+@@ -383,6 +385,7 @@ static void *rtsp_thread(void *arg) {
+ 			LOG_WARN("RTSP %u idle for %us with a connection pending, displacing it", sock, (unsigned)((gettime_ms() - last_rx) / 1000));
+ 			closesocket(sock);
+ 			sock = -1;
++			if (ctx->ht) session_end(ctx);
+ 			continue;
+ 		}
+ 
+@@ -395,6 +398,7 @@ static void *rtsp_thread(void *arg) {
+ 			closesocket(sock);
+ 			LOG_INFO("RTSP close %u", sock);
+ 			sock = -1;
++			if (ctx->ht) session_end(ctx);
+ 		}
+ 	}
+ 
+@@ -404,6 +408,29 @@ static void *rtsp_thread(void *arg) {
+ }
+ 
+ 
++/*----------------------------------------------------------------------------*/
++// End the current session: on TEARDOWN, or when the RTSP connection drops
++// without one (sender left the network, app killed).
++static void session_end(raopsr_t *ctx) {
++	ctx->raop_cb(ctx->owner, RAOP_STOP);
++	raopsr_metadata_free(&ctx->metadata);
++	raopst_end(ctx->ht);
++
++	ctx->ht = NULL;
++	ctx->hport = -1;
++
++	// need to make sure no search is on-going and reclaim pthread memory
++	if (ctx->active_remote.handle) {
++		mdnssd_close(ctx->active_remote.handle);
++		pthread_join(ctx->search_thread, NULL);
++	}
++	memset(&ctx->active_remote, 0, sizeof(ctx->active_remote));
++
++	NFREE(ctx->rtsp.aeskey);
++	NFREE(ctx->rtsp.aesiv);
++	NFREE(ctx->rtsp.fmtp);
++}
++
+ /*----------------------------------------------------------------------------*/
+ static bool handle_rtsp(raopsr_t* ctx, int sock)
+ {
+@@ -565,21 +592,7 @@ static bool handle_rtsp(raopsr_t* ctx, int sock)
+ 		ctx->flushedArtwork = true;
+ 	}  else if (!strcmp(method, "TEARDOWN")) {
+ 
+-		ctx->raop_cb(ctx->owner, RAOP_STOP);
+-		raopsr_metadata_free(&ctx->metadata);
+-		raopst_end(ctx->ht);
+-
+-		ctx->ht = NULL;
+-		ctx->hport = -1;
+-
+-		// need to make sure no search is on-going and reclaim pthread memory
+-		if (ctx->active_remote.handle) mdnssd_close(ctx->active_remote.handle);
+-		pthread_join(ctx->search_thread, NULL);
+-		memset(&ctx->active_remote, 0, sizeof(ctx->active_remote));
+-
+-		NFREE(ctx->rtsp.aeskey);
+-		NFREE(ctx->rtsp.aesiv);
+-		NFREE(ctx->rtsp.fmtp);
++		session_end(ctx);
+ 
+ 	} else if (!strcmp(method, "SET_PARAMETER")) {
+ 		char *p;
