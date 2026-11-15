@@ -20,6 +20,14 @@ class Lua:
             return M
           end}
         ''')
+        # resolve require("applets.AirPlay.X") to applet/AirPlay/X.lua
+        self.rt.execute(f"""
+          table.insert(package.loaders, 2, function(name)
+            local mod = string.match(name, '^applets%.AirPlay%.([%w_]+)$')
+            if not mod then return nil end
+            return assert(loadfile('{APPLET}/' .. mod .. '.lua'))
+          end)
+        """)
 
     def fake(self, name, lua_expr):
         """package.loaded[name] = <lua_expr>"""

@@ -1,0 +1,5 @@
+AIRPLAY
+	EN	AirPlay
+	DA	AirPlay
+	DE	AirPlay
+	NL	AirPlay
