@@ -157,7 +157,8 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 	char hostname[80];
-	snprintf(hostname, sizeof(hostname), "airplay-%02x%02x%02x", mac[3], mac[4], mac[5]);
+	/* must be a .local name: iOS resolves the SRV target before connecting */
+	snprintf(hostname, sizeof(hostname), "airplay-%02x%02x%02x.local", mac[3], mac[4], mac[5]);
 	mdnsd_set_hostname(svr, hostname, host);
 
 	struct raopsr_s *raop = raopsr_create(host, svr, args.name, "SqueezeboxRadio", mac,

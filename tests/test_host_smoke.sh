@@ -23,6 +23,13 @@ line=$(python3 "$ROOT/tests/mdns_browse.py" 5 | grep "@$NAME\._raop\._tcp") || f
 port=$(echo "$line" | cut -f2)
 echo "ok   mDNS: $(echo "$line" | cut -f1) port $port"
 
+# Resolve like an iPhone: SRV target must be a .local host whose A record is our IP.
+inst=$(echo "$line" | cut -f1 | sed 's/\._raop\._tcp\.local$//')
+res=$(python3 "$ROOT/tests/mdns_resolve.py" "$inst")
+target=$(echo "$res" | awk '$0 ~ /^SRV/ && /, 33, /' | sed "s/.*, '\([^']*\):[0-9]*')$/\1/" | head -1)
+case "$target" in *.local) ;; *) fail "SRV target '$target' is not a .local hostname" ;; esac
+echo "$res" | grep -q "^A .*'$target', 1, .*'$IP')" || fail "A record for $target does not resolve to $IP"
+echo "ok   resolvable: $target -> $IP"
 python3 "$ROOT/tests/rtsp_challenge.py" "$IP" "$port" || fail "Apple-Challenge"
 python3 "$ROOT/tests/rtsp_bad_fmtp.py" "$IP" "$port" || fail "huge ALAC frame size"
 sleep 0.5
