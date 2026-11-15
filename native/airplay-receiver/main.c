@@ -27,6 +27,9 @@ log_level util_loglevel = lWARN;
 static struct in_addr host;
 static const char *state_dir;
 static unsigned stream_generation;
+static bool session_live;
+/* raop_cb runs on the RTSP thread and (for PLAY) on the streamer thread */
+static pthread_mutex_t cb_lock = PTHREAD_MUTEX_INITIALIZER;
 
 static void state(const char *name, const char *fmt, ...) {
 	char buf[1024];
@@ -62,6 +65,7 @@ static const char *oneline(const char *s) {
 static void raop_cb(void *owner, raopsr_event_t ev, ...) {
 	va_list ap;
 	(void)owner;
+	pthread_mutex_lock(&cb_lock);
 	va_start(ap, ev);
 	switch (ev) {
 	case RAOP_STREAM: {
@@ -70,12 +74,17 @@ static void raop_cb(void *owner, raopsr_event_t ev, ...) {
 			  raopst_http_loopback ? "127.0.0.1" : inet_ntoa(host), port);
 		state("stream", "%u %u\n", ++stream_generation, port);
 		state("state", "playing\n");
+		session_live = true;
 		break;
 	}
-	case RAOP_PLAY:  event("PLAY"); state("state", "playing\n"); break;
+	case RAOP_PLAY:
+		event("PLAY");
+		/* the streamer thread can report PLAY after the session was stopped */
+		if (session_live) state("state", "playing\n");
+		break;
 	case RAOP_PAUSE: event("PAUSE"); state("state", "flushed\n"); break;
 	case RAOP_FLUSH: event("FLUSH"); state("state", "flushed\n"); break;
-	case RAOP_STOP:  event("STOP"); state("state", "stopped\n"); break;
+	case RAOP_STOP:  event("STOP"); state("state", "stopped\n"); session_live = false; break;
 	case RAOP_VOLUME: {
 		double v = va_arg(ap, double);
 		event("VOLUME %.3f", v);
@@ -96,6 +105,7 @@ static void raop_cb(void *owner, raopsr_event_t ev, ...) {
 	}
 	}
 	va_end(ap);
+	pthread_mutex_unlock(&cb_lock);
 }
 
 int main(int argc, char **argv) {

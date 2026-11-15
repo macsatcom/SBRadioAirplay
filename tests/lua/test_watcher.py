@@ -136,3 +136,27 @@ def test_missing_other_applets_is_fine(lua, app):
     set_snap(lua, gen=1, port=6069, state="playing")
     app.tick(app)
     assert "start 127.0.0.1 6069" in events(lua)
+
+
+def test_leftover_paused_session_at_startup_does_not_play(lua, app):
+    # SqueezePlay restarted while an old receiver session was paused
+    set_snap(lua, gen=3, port=6069, state="flushed")
+    app.tick(app)
+    assert events(lua) == []
+
+
+def test_player_not_ready_retries_next_tick(lua, app):
+    lua("playbackObj.start = function(self, h, p) table.insert(log, 'start-fail'); return false end")
+    set_snap(lua, gen=1, port=6069, state="playing")
+    app.tick(app)
+    assert "start-fail" in events(lua)
+    lua("playbackObj.start = function(self, h, p) table.insert(log, 'start ' .. h .. ' ' .. p); return true end")
+    app.tick(app)
+    assert "start 127.0.0.1 6069" in events(lua)
+
+
+def test_volume_not_lost_when_start_fails(lua, app):
+    lua("playbackObj.start = function() return false end")
+    set_snap(lua, gen=1, port=6069, state="playing", volume=0.4)
+    app.tick(app)
+    assert "volume 40" in events(lua)

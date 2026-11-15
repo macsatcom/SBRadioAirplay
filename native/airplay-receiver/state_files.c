@@ -3,7 +3,10 @@
 #include <errno.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <pthread.h>
 #include "state_files.h"
+
+static int sf_write_locked(const char *dir, const char *name, const char *content);
 
 static const char *const names[] = { "stream", "state", "volume", "metadata", NULL };
 
@@ -31,7 +34,17 @@ int sf_init(const char *dir) {
 	return 0;
 }
 
+/* libraop calls back from several threads; they share <name>.tmp */
+static pthread_mutex_t write_lock = PTHREAD_MUTEX_INITIALIZER;
+
 int sf_write(const char *dir, const char *name, const char *content) {
+	pthread_mutex_lock(&write_lock);
+	int rc = sf_write_locked(dir, name, content);
+	pthread_mutex_unlock(&write_lock);
+	return rc;
+}
+
+static int sf_write_locked(const char *dir, const char *name, const char *content) {
 	char path[300], tmp[310];
 	snprintf(path, sizeof(path), "%s/%s", dir, name);
 	snprintf(tmp, sizeof(tmp), "%s.tmp", path);

@@ -161,3 +161,10 @@ def test_speaker_name_without_mac(lua):
     inst.init(inst, lua.eval("applet"), lua.eval("{execute=execute, open=open, timer=timer, model='Squeezebox Touch'}"))
     lua("applet._settings.deviceName = 'Squeezebox Touch'")
     assert inst.speakerName(inst) == "Squeezebox Touch"
+
+
+def test_start_clears_previous_state_files(lua, svc):
+    svc.start(svc)
+    c = start_cmd(lua)
+    assert "rm -f /tmp/airplay/stream /tmp/airplay/state" in c
+    assert c.index("rm -f /tmp/airplay/stream") < c.index("exec ")

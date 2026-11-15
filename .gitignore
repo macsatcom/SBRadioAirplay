@@ -8,3 +8,4 @@ build/baby/
 build/fab4/
 .venv/
 dist/
+__pycache__/

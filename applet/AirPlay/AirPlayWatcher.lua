@@ -55,19 +55,33 @@ end
 
 function Watcher:tick()
     local s = AirPlayState.read(STATE_DIR)
+    local firstTick = self.last == nil
     local d = AirPlayState.diff(self.last, s)
     self.last = s
 
-    if d.newStream and s.state ~= "stopped" then
+    -- At startup only a session that is actually playing counts; leftovers
+    -- (paused session, receiver being restarted) must not grab the decoder.
+    local wantStream = d.newStream and s.state ~= "stopped" and (not firstTick or s.state == "playing")
+    -- Retry a start that failed (e.g. local player not ready yet at boot).
+    if not wantStream and self.pendingGen and self.pendingGen == s.gen and s.state == "playing" then
+        wantStream = true
+    end
+    if s.state == "stopped" then self.pendingGen = nil end
+
+    if wantStream then
         local firstOfSession = not self.active
         self:_handOver()
-        self.playback:start(LOOPBACK, s.port)
-        self.active = true
-        if firstOfSession then
-            self.session = self.session + 1
-            local ok, err = pcall(function() self.nowPlaying:activate(self:_metadata(s), self.session) end)
-            if not ok then self:_warn("Now Playing activate failed: ", err) end
-            self:_goNowPlaying()
+        if self.playback:start(LOOPBACK, s.port) then
+            self.pendingGen = nil
+            self.active = true
+            if firstOfSession then
+                self.session = self.session + 1
+                local ok, err = pcall(function() self.nowPlaying:activate(self:_metadata(s), self.session) end)
+                if not ok then self:_warn("Now Playing activate failed: ", err) end
+                self:_goNowPlaying()
+            end
+        else
+            self.pendingGen = s.gen
         end
     end
 

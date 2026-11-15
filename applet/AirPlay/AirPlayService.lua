@@ -109,7 +109,9 @@ function start(self)
     end
     self.desiredRunning = true
     if self:isRunning() then return true end
-    local cmd = "mkdir -p " .. STATE_DIR .. "; : > " .. LOG .. "; ( exec " .. q(BIN) ..
+    -- drop a previous receiver's state so the watcher cannot act on it
+    local cmd = "mkdir -p " .. STATE_DIR .. "; rm -f " .. STATE_DIR .. "/stream " .. STATE_DIR ..
+        "/state; : > " .. LOG .. "; ( exec " .. q(BIN) ..
         " --name " .. q(self:speakerName()) .. " --state-dir " .. STATE_DIR ..
         " -d 1 >/dev/null 2>>" .. LOG .. " ) & echo $! > " .. PID
     if self.execute(cmd) ~= 0 then
