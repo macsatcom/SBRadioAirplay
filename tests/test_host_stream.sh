@@ -1,7 +1,8 @@
 #!/bin/sh
 # End-to-end host test: libraop's raop_play sends a 1 kHz tone to our receiver,
 # we capture the HTTP audio stream and verify it.
-# RECEIVER may be overridden (e.g. "qemu-arm -cpu arm926 build/out/baby/airplay-receiver").
+# RECEIVER and IP may be overridden; tests/device_run.sh runs the receiver on a
+# Radio over SSH and sets CLEANUP_CMD to stop it remotely.
 set -u
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 RECEIVER=${RECEIVER:-$ROOT/build/out/host/airplay-receiver}
@@ -14,7 +15,7 @@ SENDER=$(sh "$ROOT/tests/raop_send.sh")
 FIX="$WORK/sine1k-6s.raw"
 [ -f "$FIX" ] || python3 "$ROOT/tests/make_fixture.py" "$FIX" 6
 
-cleanup() { kill "$PID" 2>/dev/null; wait "$PID" 2>/dev/null; }
+cleanup() { [ -n "${CLEANUP_CMD:-}" ] && sh -c "$CLEANUP_CMD"; kill "$PID" 2>/dev/null; wait "$PID" 2>/dev/null; }
 fail() { echo "FAIL $*"; tail -20 "$LOG"; cleanup; exit 1; }
 
 # shellcheck disable=SC2086

@@ -1,0 +1,79 @@
+# Milestone 1: device test procedure and results
+
+Goal: prove that `airplay-receiver` runs on the real hardware and that an
+iPhone/Mac can play to it. Nothing is installed on the device: the binary is
+copied to `/tmp` and is gone after a reboot.
+
+## Before you start
+
+On this PC:
+
+```sh
+sh build/fetch-deps.sh
+sh build/build-host.sh        # host binary + raop_play test sender
+sh build/build-arm.sh all     # build/out/baby and build/out/fab4
+```
+
+On the device: SSH enabled (*Settings → Advanced → Remote Login*), root
+password usually `1234`. If SSH complains about algorithms, override
+`SSH_OPTS` (see `tests/device_run.sh`).
+
+## A. Host (this PC) with a real iPhone/Mac
+
+1. `build/out/host/airplay-receiver --name "PC AirPlay Test" --codec wav -d 3`
+2. On the iPhone: Control Centre → AirPlay → pick "PC AirPlay Test", play music.
+3. Copy the `url=` from the `STREAM` line, then listen:
+   `curl -s <url> | ffplay -nodisp -`  (or save with `-o capture.wav`)
+4. Move the volume slider, skip a track, pause, stop.
+
+| Check | Result |
+|---|---|
+| Speaker visible on iPhone | |
+| Music sounds right | |
+| `VOLUME` lines on slider move | |
+| `METADATA` line on track change | |
+| `STOP` when playback stopped / iPhone switches speaker | |
+
+## B. Automated stream test on the device
+
+Runs the receiver on the device and the sender, mDNS lookup and capture on
+this PC (exercises ARM ALAC + AES decode, reconnect, late HTTP client,
+sender vanishing):
+
+```sh
+sh tests/device_run.sh <radio-ip> baby test
+sh tests/device_run.sh <touch-ip> fab4 test
+```
+
+Expected: last line `ok   stream test passed`.
+
+## C. iPhone → device
+
+```sh
+sh tests/device_run.sh <device-ip> baby run     # terminal 1, stays in foreground
+sh tests/device_run.sh <device-ip> baby measure # terminal 2, while music plays
+```
+
+Capture 30 s from this PC with the URL from the `STREAM` line:
+`curl -s -m 30 <url> -o capture.wav` and listen to it.
+
+Repeat with Spotify Connect running, starting it both before and after the
+receiver (mDNS port 5353 sharing on kernel 2.6.26, which has no
+`SO_REUSEPORT`).
+
+## Results
+
+| Check | Radio (baby) | Touch (fab4) |
+|---|---|---|
+| Kernel (`uname -r`) | | |
+| Binary starts, `READY` line | | |
+| B. automated stream test | | |
+| Speaker visible on iPhone | | |
+| Captured audio sounds right | | |
+| RSS while streaming (kB) | | |
+| CPU % while streaming | | |
+| Spotify Connect started first: both visible | | |
+| Receiver started first: both visible | | |
+| Ctrl-C / SIGTERM exits cleanly | | |
+
+Notes:
