@@ -7,3 +7,4 @@ build/host/
 build/baby/
 build/fab4/
 .venv/
+dist/
