@@ -15,6 +15,7 @@ local function widget(kind)
     w.hide=function() end
     return w end
 end
+package.loaded['jive.ui.Framework'] = {getTicks=function() return 0 end}
 package.loaded['jive.ui.Window'] = widget('window')
 package.loaded['jive.ui.SimpleMenu'] = widget('menu')
 timers = {}
@@ -107,3 +108,12 @@ def test_free_keeps_service_running(jive):
             appletInstance.service.shutdown = function() shutdownCalled = true end""")
     assert jive.eval("appletInstance:free()") is False
     assert jive.eval("shutdownCalled") is False
+
+
+def test_applet_wires_ownership_into_playback(jive):
+    jive("package.loaded['jive.ui.Framework'] = {getTicks=function() return 0 end}")
+    jive.load("AirPlayApplet")
+    jive("""appletInstance = setmetatable({_settings={serviceMode='manual'}, storeSettings=function() end},
+            {__index=package.loaded['applets.AirPlay.AirPlayApplet']}); appletInstance:init()""")
+    assert jive.eval("appletInstance.ownership ~= nil")
+    assert jive.eval("appletInstance.playback.ownership == appletInstance.ownership")

@@ -3,7 +3,7 @@ import pytest
 
 PRELUDE = r'''
 calls = {}
-local function rec(...) table.insert(calls, {...}) end
+function rec(...) table.insert(calls, {...}) end
 playback = {
   stopInternal=function(self) rec('stopInternal') end,
   _streamConnect=function(self, host, port) rec('streamConnect', host, port) end,
@@ -27,9 +27,11 @@ package.loaded['squeezeplay.stream'] = {icyMetaInterval=function(self, n) rec('i
 @pytest.fixture
 def pb(lua):
     lua(PRELUDE)
+    lua("""ownership = {install=function(self, p) rec('own.install') end,
+                        setActive=function(self, on) rec('own.active', on) end}""")
     mod = lua.load("AirPlayPlayback")
     inst = mod()
-    inst.init(inst, None)
+    inst.init(inst, None, lua.eval("ownership"))
     return inst
 
 
@@ -68,28 +70,37 @@ def test_start_without_player_fails(lua, pb):
 def test_volume_zero_mutes(lua, pb):
     pb.start(pb, "127.0.0.1", 6069)
     assert pb.setRemoteVolume(pb, 0) is True
-    assert calls(lua, "volume") == [[0, True]]
+    assert calls(lua, "volumeLocal") == [[0, True, True]]
+    assert calls(lua, "audioGain") == [[0, 0]]
 
 
-def test_volume_goes_through_player_like_the_knob(lua, pb):
-    # Must tell the server (send=true); a state-only local change gets
-    # overridden by the server's stored volume (silent playback on the Radio).
+def test_volume_is_local_not_sent_to_server(lua, pb):
+    # While AirPlay owns the player the server is kept out (AirPlayOwnership),
+    # so volume is applied locally like Spotify Connect does.
     pb.start(pb, "127.0.0.1", 6069)
     assert pb.setRemoteVolume(pb, 50) is True
-    assert calls(lua, "volume") == [[50, True]]
-    assert calls(lua, "volumeLocal") == []
+    assert calls(lua, "volumeLocal") == [[50, True, True]]
+    assert calls(lua, "audioGain") == [[50000, 50000]]
+    assert calls(lua, "volume") == []
+
+
+def test_start_activates_ownership_and_stop_releases(lua, pb):
+    pb.start(pb, "127.0.0.1", 6069)
+    assert calls(lua, "own.install") and calls(lua, "own.active") == [[True]]
+    pb.stop(pb)
+    assert calls(lua, "own.active") == [[True], [False]]
 
 
 def test_volume_clamped(lua, pb):
     pb.start(pb, "127.0.0.1", 6069)
     pb.setRemoteVolume(pb, 140)
-    assert calls(lua, "volume")[-1][0] == 100
+    assert calls(lua, "volumeLocal")[-1][0] == 100
 
 
 def test_volume_before_start_is_remembered_and_applied(lua, pb):
     assert pb.setRemoteVolume(pb, 30) is False
     pb.start(pb, "127.0.0.1", 6069)
-    assert calls(lua, "volume") == [[30, True]]
+    assert calls(lua, "volumeLocal") == [[30, True, True]]
 
 
 def test_stop_once(lua, pb):
@@ -114,4 +125,4 @@ def test_airplay_volume_follows_decibels(lua, pb, airplay, percent):
     lua(CURVE)
     pb.start(pb, "127.0.0.1", 6069)
     assert pb.setAirPlayVolume(pb, airplay) is True
-    assert calls(lua, "volume")[-1][0] == percent
+    assert calls(lua, "volumeLocal")[-1][0] == percent

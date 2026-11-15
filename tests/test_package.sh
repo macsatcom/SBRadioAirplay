@@ -12,6 +12,7 @@ fail() { echo "FAIL $*"; exit 1; }
 want="AirPlayApplet.lua
 AirPlayMeta.lua
 AirPlayNowPlaying.lua
+AirPlayOwnership.lua
 AirPlayPlayback.lua
 AirPlayService.lua
 AirPlayState.lua

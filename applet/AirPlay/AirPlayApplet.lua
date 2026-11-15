@@ -8,6 +8,7 @@ local AirPlayService = require("applets.AirPlay.AirPlayService")
 local AirPlayPlayback = require("applets.AirPlay.AirPlayPlayback")
 local AirPlayNowPlaying = require("applets.AirPlay.AirPlayNowPlaying")
 local AirPlayWatcher = require("applets.AirPlay.AirPlayWatcher")
+local AirPlayOwnership = require("applets.AirPlay.AirPlayOwnership")
 local pcall, os = pcall, os
 local appletManager = appletManager
 
@@ -19,8 +20,9 @@ local log = Log.logger("applet.AirPlay")
 function init(self)
     os.execute("chmod 755 " .. AirPlayService.BIN .. " 2>/dev/null")
     self._settings = self._settings or {}
+    self.ownership = AirPlayOwnership.new({ onPowerOff = function() self.playback:stop() end })
     self.playback = AirPlayPlayback()
-    self.playback:init(self)
+    self.playback:init(self, self.ownership)
     self.nowPlaying = AirPlayNowPlaying.new({ log = log })
     self.watcher = AirPlayWatcher.new({ playback = self.playback, nowPlaying = self.nowPlaying,
         appletManager = appletManager, log = log })

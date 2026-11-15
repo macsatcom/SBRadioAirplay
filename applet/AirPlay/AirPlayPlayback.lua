@@ -9,8 +9,10 @@ local string, math = require("string"), require("math")
 module(...)
 oo.class(_M)
 
-function init(self, applet)
+-- ownership: AirPlayOwnership instance (keeps the server off the player)
+function init(self, applet, ownership)
     self.applet = applet
+    self.ownership = ownership
     self.playback = nil
     self.remoteVolume = nil
 end
@@ -24,6 +26,10 @@ function start(self, host, port)
     local playback = player and player.playback
     if not playback then return false end
     self.playback = playback
+    if self.ownership then
+        self.ownership:install(player)
+        self.ownership:setActive(true)
+    end
     playback:stopInternal()
     if player.incrementSequenceNumber then player:incrementSequenceNumber() end
     playback.flags = 0
@@ -65,9 +71,11 @@ function setRemoteVolume(self, percent)
     if not self.playback then return false end
     local player = Player:getLocalPlayer()
     if not player or player.playback ~= self.playback then return false end
-    -- Same path as the volume knob: sets the gain and tells the server, so
-    -- the server does not push its stale volume back over ours.
-    player:volume(self.remoteVolume, true)
+    -- Local only, like Spotify Connect: AirPlayOwnership keeps the server's
+    -- volume commands away while AirPlay plays.
+    player:volumeLocal(self.remoteVolume, true, true)
+    local gain = self.remoteVolume == 0 and 0 or self.playback:_getGainFromVolume(self.remoteVolume)
+    decode:audioGain(gain, gain)
     return true
 end
 
@@ -95,4 +103,5 @@ function stop(self)
         self.playback:stopInternal()
         self.playback = nil
     end
+    if self.ownership then self.ownership:setActive(false) end
 end
