@@ -85,8 +85,9 @@ Notes:
 - Session setup costs about 4 s of CPU in the RTSP thread: the RSA-2048
   private-key operations (Apple-Challenge and AES key) in wolfSSL built
   without ARM assembly. The connection takes about 1.4 s, and the system sits
-  near 100 % during that burst. Candidate fix: wolfSSL `--enable-sp
-  --enable-sp-math` and/or cache the parsed key.
+  near 100 % during that burst. Fixed: wolfSSL now uses SP math with ARM
+  assembly (`-DWOLFSSL_ARM_ARCH=5`, no UMAAL), at 384 ms per RSA operation
+  instead of 1413 ms (`tests/time_challenge.sh`).
 - Whole system was 83 % busy while streaming with an HTTP listener, which
   includes SSH and curl serving overhead from the test itself. Two of six
   earlier runs had audible gaps (16 ms and 96 ms); these overlapped with
