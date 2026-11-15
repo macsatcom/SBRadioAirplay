@@ -49,7 +49,13 @@ function start(self, host, port)
     decode:start(string.byte('p'), 0, 0, 0, 0, 0, 0,
         string.byte('1'), string.byte('3'), string.byte('2'), string.byte('0'))
     playback:_streamConnect(host, port)
-    if self.remoteVolume then self:setRemoteVolume(self.remoteVolume) end
+    if self.pendingAirPlay then
+        local v = self.pendingAirPlay
+        self.pendingAirPlay = nil
+        self:setAirPlayVolume(v)
+    elseif self.remoteVolume then
+        self:setRemoteVolume(self.remoteVolume)
+    end
     return true
 end
 
@@ -63,6 +69,25 @@ function setRemoteVolume(self, percent)
     local gain = self.remoteVolume == 0 and 0 or self.playback:_getGainFromVolume(self.remoteVolume)
     decode:audioGain(gain, gain)
     return true
+end
+
+-- AirPlay volume (0..1, linear in dB over -30..0, 0 = mute) -> the Radio
+-- volume step whose firmware gain is closest to that dB level.
+function setAirPlayVolume(self, airplay)
+    if not airplay or airplay <= 0 then return self:setRemoteVolume(0) end
+    local playback = self.playback
+    if not playback then
+        self.pendingAirPlay = airplay
+        return false
+    end
+    local target = 65536 * 10 ^ ((math.min(airplay, 1) - 1) * 30 / 20)
+    local best, bestDiff = 100, math.huge
+    for step = 1, 100 do
+        local gain = playback:_getGainFromVolume(step)
+        local diff = gain and math.abs(gain - target)
+        if diff and diff < bestDiff then best, bestDiff = step, diff end
+    end
+    return self:setRemoteVolume(best)
 end
 
 function stop(self)

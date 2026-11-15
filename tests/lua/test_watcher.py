@@ -10,6 +10,7 @@ playbackObj = {
   start=function(self, host, port) rec('start', host, port); return true end,
   stop=function(self) rec('stop') end,
   setRemoteVolume=function(self, p) rec('volume', p); return true end,
+  setAirPlayVolume=function(self, v) rec('airplay', string.format('%.3f', v)); return true end,
   isActive=function() return true end}
 nowPlayingObj = {
   activate=function(self, d, g) rec('np.activate', d.title or '-', g) end,
@@ -104,10 +105,10 @@ def test_new_session_after_stop_navigates_again(lua, app):
 def test_volume(lua, app):
     set_snap(lua, gen=1, port=6069, state="playing", volume=0.5)
     app.tick(app)
-    assert "volume 50" in events(lua)
+    assert "airplay 0.500" in events(lua)
     set_snap(lua, gen=1, port=6069, state="playing", volume=0.004)
     app.tick(app)
-    assert events(lua) == ["volume 0"]
+    assert events(lua) == ["airplay 0.004"]
 
 
 def test_metadata_updates_now_playing(lua, app):
@@ -159,4 +160,4 @@ def test_volume_not_lost_when_start_fails(lua, app):
     lua("playbackObj.start = function() return false end")
     set_snap(lua, gen=1, port=6069, state="playing", volume=0.4)
     app.tick(app)
-    assert "volume 40" in events(lua)
+    assert "airplay 0.400" in events(lua)

@@ -86,7 +86,7 @@ function Watcher:tick()
     end
 
     if d.volumeChanged then
-        self.playback:setRemoteVolume(math.floor(s.volume * 100 + 0.5))
+        self.playback:setAirPlayVolume(s.volume)
     end
 
     if d.metadataChanged and self.active and not d.newStream then

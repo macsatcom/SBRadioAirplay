@@ -96,3 +96,20 @@ def test_stop_once(lua, pb):
     pb.stop(pb)
     assert len(calls(lua, "stopInternal")) == 2  # one from start, one from stop
     assert not pb.isActive(pb)
+
+
+CURVE = r'''
+-- firmware-like curve: volume v (1..100) -> 65536 * 10^(-(100-v)*0.72/20)
+playback._getGainFromVolume = function(self, v)
+  return math.floor(65536 * 10 ^ (-(100 - v) * 0.72 / 20) + 0.5)
+end
+'''
+
+
+@pytest.mark.parametrize("airplay,percent", [(1.0, 100), (0.5, 79), (0.0, 0), (0.1, 62), (0.001, 58)])
+def test_airplay_volume_follows_decibels(lua, pb, airplay, percent):
+    # AirPlay 0..1 is linear in dB over -30..0; 0 is mute
+    lua(CURVE)
+    pb.start(pb, "127.0.0.1", 6069)
+    assert pb.setAirPlayVolume(pb, airplay) is True
+    assert calls(lua, "volumeLocal")[-1][0] == percent
