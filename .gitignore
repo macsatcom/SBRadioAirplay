@@ -6,3 +6,4 @@ build/host/
 .superpowers/
 build/baby/
 build/fab4/
+.venv/
