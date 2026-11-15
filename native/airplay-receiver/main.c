@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
 	netsock_init();
 	host = args.ip;
 	if (!host.s_addr) host = get_interface(NULL, NULL, NULL);
-	if (!host.s_addr) {
+	if (!host.s_addr || host.s_addr == INADDR_NONE) {
 		fprintf(stderr, "no usable IPv4 interface, use --ip\n");
 		return 1;
 	}

@@ -49,11 +49,19 @@ finish_send() { # $1 = expected count of STOP lines
     done
 }
 
-# 0. a sender using uncompressed PCM (unsupported) must not kill the receiver
-timeout 5 "$SENDER" -p "$port" -e "$IP" "$FIX" > "$WORK/sender-pcm.log" 2>&1
-sleep 0.5
+# 0. a sender using uncompressed PCM (unsupported) must not kill the receiver,
+#    and rejected sessions must not leak sockets or threads.
+res() { [ -d "/proc/$PID" ] && echo "$(ls /proc/$PID/fd | wc -l)/$(ls /proc/$PID/task | wc -l)"; }
+pcm_try() { timeout 5 "$SENDER" -p "$port" -e "$IP" "$FIX" > "$WORK/sender-pcm.log" 2>&1; sleep 0.5; }
+pcm_try
 kill -0 "$PID" 2>/dev/null || fail "receiver died on PCM-only sender"
-echo "ok   survives unsupported PCM sender"
+before=$(res)
+pcm_try; pcm_try; pcm_try
+after=$(res)
+if [ -n "$before" ] && [ "$before" != "$after" ]; then
+    fail "rejected sessions leak fds/threads: $before -> $after"
+fi
+echo "ok   survives unsupported PCM sender, no leak (${after:-remote})"
 
 # 1. basic stream
 send

@@ -24,6 +24,9 @@ port=$(echo "$line" | cut -f2)
 echo "ok   mDNS: $(echo "$line" | cut -f1) port $port"
 
 python3 "$ROOT/tests/rtsp_challenge.py" "$IP" "$port" || fail "Apple-Challenge"
+python3 "$ROOT/tests/rtsp_bad_fmtp.py" "$IP" "$port" || fail "huge ALAC frame size"
+sleep 0.5
+kill -0 "$PID" 2>/dev/null || fail "receiver died on huge ALAC frame size"
 
 start=$(date +%s%N)
 kill -TERM "$PID"
@@ -36,3 +39,13 @@ wait "$PID"; rc=$?
 [ $rc = 0 ] || fail "exit code $rc"
 echo "ok   SIGTERM exit 0 in $(( ($(date +%s%N) - start) / 1000000 )) ms"
 rm -f "$LOG"
+
+# No usable IPv4 interface (only loopback): must refuse to start with a clear error.
+if unshare -rn true 2>/dev/null; then
+    out=$(unshare -rn sh -c "ip link set lo up; timeout 5 $RECEIVER --name NoNet" 2>&1); rc=$?
+    { [ $rc = 1 ] && echo "$out" | grep -q "no usable IPv4 interface"; } \
+        && echo "ok   no network: clear error, exit 1" \
+        || { echo "FAIL no network: rc=$rc: $out"; exit 1; }
+else
+    echo "skip no-network check (unshare not permitted)"
+fi

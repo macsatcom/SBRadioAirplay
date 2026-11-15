@@ -20,10 +20,10 @@ password usually `1234`. If SSH complains about algorithms, override
 
 ## A. Host (this PC) with a real iPhone/Mac
 
-1. `build/out/host/airplay-receiver --name "PC AirPlay Test" --codec wav -d 3`
+1. `build/out/host/airplay-receiver --name "PC AirPlay Test" -d 3`  (raw PCM: a listener that joins late still decodes it; with `--codec wav` the header is only sent to the first listener)
 2. On the iPhone: Control Centre → AirPlay → pick "PC AirPlay Test", play music.
 3. Copy the `url=` from the `STREAM` line, then listen:
-   `curl -s <url> | ffplay -nodisp -`  (or save with `-o capture.wav`)
+   `curl -s <url> | ffplay -nodisp -f s16be -ar 44100 -ac 2 -`
 4. Move the volume slider, skip a track, pause, stop.
 
 | Check | Result |
@@ -54,8 +54,10 @@ sh tests/device_run.sh <device-ip> baby run     # terminal 1, stays in foregroun
 sh tests/device_run.sh <device-ip> baby measure # terminal 2, while music plays
 ```
 
-Capture 30 s from this PC with the URL from the `STREAM` line:
-`curl -s -m 30 <url> -o capture.wav` and listen to it.
+Within 10 s of pressing play on the iPhone, capture from this PC with the URL
+from the `STREAM` line: `curl -s -m 30 <url> -o capture.wav`, then listen to it.
+(`run` uses `--codec wav`; the receiver replays its first ~12 s to the first
+listener, header included. Later listeners get headerless PCM.)
 
 Repeat with Spotify Connect running, starting it both before and after the
 receiver (mDNS port 5353 sharing on kernel 2.6.26, which has no

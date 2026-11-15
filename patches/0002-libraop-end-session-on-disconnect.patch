@@ -1,5 +1,5 @@
 diff --git a/src/raop_server.c b/src/raop_server.c
-index a55f617..3cb9e21 100644
+index a55f617..061f10f 100644
 --- a/src/raop_server.c
 +++ b/src/raop_server.c
 @@ -70,6 +70,7 @@ static log_level 	*loglevel = &raop_loglevel;
@@ -14,7 +14,7 @@ index a55f617..3cb9e21 100644
  			closesocket(sock);
  			LOG_INFO("RTSP close %u", sock);
  			sock = -1;
-+			if (ctx->ht) session_end(ctx);
++			if (ctx->ht || ctx->active_remote.handle) session_end(ctx);
  			continue;
  		}
  
@@ -22,7 +22,7 @@ index a55f617..3cb9e21 100644
  			LOG_WARN("RTSP %u idle for %us with a connection pending, displacing it", sock, (unsigned)((gettime_ms() - last_rx) / 1000));
  			closesocket(sock);
  			sock = -1;
-+			if (ctx->ht) session_end(ctx);
++			if (ctx->ht || ctx->active_remote.handle) session_end(ctx);
  			continue;
  		}
  
@@ -30,21 +30,24 @@ index a55f617..3cb9e21 100644
  			closesocket(sock);
  			LOG_INFO("RTSP close %u", sock);
  			sock = -1;
-+			if (ctx->ht) session_end(ctx);
++			if (ctx->ht || ctx->active_remote.handle) session_end(ctx);
  		}
  	}
  
-@@ -404,6 +408,29 @@ static void *rtsp_thread(void *arg) {
+@@ -404,6 +408,32 @@ static void *rtsp_thread(void *arg) {
  }
  
  
 +/*----------------------------------------------------------------------------*/
 +// End the current session: on TEARDOWN, or when the RTSP connection drops
 +// without one (sender left the network, app killed).
++// Also reclaims ANNOUNCE state when no streamer was ever set up.
 +static void session_end(raopsr_t *ctx) {
-+	ctx->raop_cb(ctx->owner, RAOP_STOP);
++	if (ctx->ht) {
++		ctx->raop_cb(ctx->owner, RAOP_STOP);
++		raopst_end(ctx->ht);
++	}
 +	raopsr_metadata_free(&ctx->metadata);
-+	raopst_end(ctx->ht);
 +
 +	ctx->ht = NULL;
 +	ctx->hport = -1;
@@ -64,7 +67,17 @@ index a55f617..3cb9e21 100644
  /*----------------------------------------------------------------------------*/
  static bool handle_rtsp(raopsr_t* ctx, int sock)
  {
-@@ -565,21 +592,7 @@ static bool handle_rtsp(raopsr_t* ctx, int sock)
+@@ -454,6 +484,9 @@ static bool handle_rtsp(raopsr_t* ctx, int sock)
+ 	} else if (!strcmp(method, "ANNOUNCE") && body) {
+ 		char *padded, *p;
+ 
++		// a previous session on this connection was never torn down
++		if (ctx->ht || ctx->active_remote.handle) session_end(ctx);
++
+ 		NFREE(ctx->rtsp.aeskey);
+ 		NFREE(ctx->rtsp.aesiv);
+ 		NFREE(ctx->rtsp.fmtp);
+@@ -565,21 +598,7 @@ static bool handle_rtsp(raopsr_t* ctx, int sock)
  		ctx->flushedArtwork = true;
  	}  else if (!strcmp(method, "TEARDOWN")) {
  

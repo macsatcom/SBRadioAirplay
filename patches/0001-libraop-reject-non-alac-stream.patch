@@ -1,13 +1,17 @@
 diff --git a/src/raop_streamer.c b/src/raop_streamer.c
-index 178295c..b566666 100644
+index 178295c..067082c 100644
 --- a/src/raop_streamer.c
 +++ b/src/raop_streamer.c
-@@ -240,6 +240,17 @@ raopst_resp_t raopst_init(struct in_addr host, struct in_addr peer, char *codec,
- 	memset(fmtp, 0, sizeof(fmtp));
- 	for (int i = 0; (arg = strsep(&fmtpstr, " \t")); i++) fmtp[i] = atoi(arg);
+@@ -238,7 +238,19 @@ raopst_resp_t raopst_init(struct in_addr host, struct in_addr peer, char *codec,
+ 	}
  
-+	// only ALAC is supported: without a valid fmtp there is no frame size
-+	if (fmtp[1] <= 0 || !ctx->encoder) {
+ 	memset(fmtp, 0, sizeof(fmtp));
+-	for (int i = 0; (arg = strsep(&fmtpstr, " \t")); i++) fmtp[i] = atoi(arg);
++	for (int i = 0; i < 12 && (arg = strsep(&fmtpstr, " \t")); i++) fmtp[i] = atoi(arg);
++
++	// only ALAC is supported: without a valid fmtp there is no frame size;
++	// senders use 352, anything above 4096 is bogus and would exhaust memory
++	if (fmtp[1] <= 0 || fmtp[1] > 4096 || !ctx->encoder) {
 +		LOG_ERROR("[%p]: unsupported stream (no ALAC fmtp or bad codec)", ctx);
 +		encoder_delete(ctx->encoder);
 +		pthread_mutex_destroy(&ctx->ab_mutex);
@@ -16,7 +20,6 @@ index 178295c..b566666 100644
 +		free(ctx);
 +		return resp;
 +	}
-+
+ 
  	ctx->frame_size = fmtp[1];
  	ctx->silence_frame = (char*) calloc(ctx->frame_size, 4);
- 	if ((p = strchr(latencies, ':')) != NULL) {
