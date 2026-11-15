@@ -1,9 +1,0 @@
-/home/ksn/git-ksn/SBRadioAirplay/build/fab4/CMakeFiles/ar_encoder.dir
-/home/ksn/git-ksn/SBRadioAirplay/build/fab4/CMakeFiles/ar_args.dir
-/home/ksn/git-ksn/SBRadioAirplay/build/fab4/CMakeFiles/airplay-receiver.dir
-/home/ksn/git-ksn/SBRadioAirplay/build/fab4/CMakeFiles/edit_cache.dir
-/home/ksn/git-ksn/SBRadioAirplay/build/fab4/CMakeFiles/rebuild_cache.dir
-/home/ksn/git-ksn/SBRadioAirplay/build/fab4/CMakeFiles/list_install_components.dir
-/home/ksn/git-ksn/SBRadioAirplay/build/fab4/CMakeFiles/install.dir
-/home/ksn/git-ksn/SBRadioAirplay/build/fab4/CMakeFiles/install/local.dir
-/home/ksn/git-ksn/SBRadioAirplay/build/fab4/CMakeFiles/install/strip.dir

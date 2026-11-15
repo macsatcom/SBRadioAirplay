@@ -1,2 +1,0 @@
-/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/arm-buildroot-linux-musleabi-ar qc libar_args.a "CMakeFiles/ar_args.dir/native/airplay-receiver/args.c.o"
-/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/arm-buildroot-linux-musleabi-ranlib libar_args.a

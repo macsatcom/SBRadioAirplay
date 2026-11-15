@@ -1,2 +1,0 @@
-/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/arm-buildroot-linux-musleabi-ar qc libar_encoder.a "CMakeFiles/ar_encoder.dir/native/airplay-receiver/encoder_pcm.c.o"
-/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/arm-buildroot-linux-musleabi-ranlib libar_encoder.a
