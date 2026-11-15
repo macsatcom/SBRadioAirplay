@@ -126,3 +126,35 @@ def test_airplay_volume_follows_decibels(lua, pb, airplay, percent):
     pb.start(pb, "127.0.0.1", 6069)
     assert pb.setAirPlayVolume(pb, airplay) is True
     assert calls(lua, "volumeLocal")[-1][0] == percent
+
+
+def set_status(lua, audioState=0, decodeFull=0):
+    lua(f"package.loaded['squeezeplay.decode'].status = function() return {{audioState={audioState}, decodeFull={decodeFull}}} end")
+
+
+def test_resumes_audio_after_output_underrun_when_buffered(lua, pb):
+    # Stock Playback pauses output on underrun and waits for the server's
+    # strm-u; without LMS nobody sends it, so we resume locally.
+    lua("package.loaded['squeezeplay.decode'].resumeAudio = function() rec('resumeAudio') end")
+    pb.start(pb, "127.0.0.1", 6069)
+    lua("playback.sentOutputUnderrunEvent = true")
+    set_status(lua, audioState=0, decodeFull=1000)
+    pb.recover(pb)
+    assert calls(lua, "resumeAudio") == []          # not enough buffered yet
+    set_status(lua, audioState=0, decodeFull=50000)
+    pb.recover(pb)
+    pb.recover(pb)
+    assert len(calls(lua, "resumeAudio")) == 1      # once per underrun
+    lua("playback.sentOutputUnderrunEvent = false")
+    set_status(lua, audioState=0, decodeFull=50000)
+    pb.recover(pb)                                  # healthy: re-arm
+    set_status(lua, audioState=2, decodeFull=50000) # audio underrun bit
+    pb.recover(pb)
+    assert len(calls(lua, "resumeAudio")) == 2
+
+
+def test_recover_when_not_playing_does_nothing(lua, pb):
+    lua("package.loaded['squeezeplay.decode'].resumeAudio = function() rec('resumeAudio') end")
+    set_status(lua, audioState=2, decodeFull=50000)
+    pb.recover(pb)
+    assert calls(lua, "resumeAudio") == []

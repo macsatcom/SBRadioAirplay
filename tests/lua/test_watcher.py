@@ -11,6 +11,7 @@ playbackObj = {
   stop=function(self) rec('stop') end,
   setRemoteVolume=function(self, p) rec('volume', p); return true end,
   setAirPlayVolume=function(self, v) rec('airplay', string.format('%.3f', v)); return true end,
+  recover=function(self) rec('recover') end,
   isActive=function() return true end}
 nowPlayingObj = {
   activate=function(self, d, g) rec('np.activate', d.title or '-', g) end,
@@ -50,7 +51,13 @@ def set_snap(lua, **kw):
 def events(lua):
     out = [lua.eval(f"log[{i}]") for i in range(1, lua.eval("#log") + 1)]
     lua("log = {}")
-    return [e for e in out if not e.startswith("read")]
+    return [e for e in out if not e.startswith("read") and e != "recover"]
+
+
+def raw_events(lua):
+    out = [lua.eval(f"log[{i}]") for i in range(1, lua.eval("#log") + 1)]
+    lua("log = {}")
+    return out
 
 
 def test_new_stream_hands_over_and_starts(lua, app):
@@ -161,3 +168,13 @@ def test_volume_not_lost_when_start_fails(lua, app):
     set_snap(lua, gen=1, port=6069, state="playing", volume=0.4)
     app.tick(app)
     assert "airplay 0.400" in events(lua)
+
+
+def test_recovery_runs_only_while_active(lua, app):
+    set_snap(lua, state="stopped")
+    app.tick(app)
+    assert "recover" not in raw_events(lua)
+    set_snap(lua, gen=1, port=6069, state="playing")
+    app.tick(app); raw_events(lua)
+    app.tick(app)
+    assert "recover" in raw_events(lua)

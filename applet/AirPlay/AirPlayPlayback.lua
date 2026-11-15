@@ -5,6 +5,7 @@ local Player = require("jive.slim.Player")
 local decode = require("squeezeplay.decode")
 local Stream = require("squeezeplay.stream")
 local string, math = require("string"), require("math")
+local pcall, type, tonumber = pcall, type, tonumber
 
 module(...)
 oo.class(_M)
@@ -96,6 +97,28 @@ function setAirPlayVolume(self, airplay)
         if diff and diff < bestDiff then best, bestDiff = step, diff end
     end
     return self:setRemoteVolume(best)
+end
+
+-- Stock Playback pauses audio after an output underrun and waits for the
+-- server to send strm-u. Without an LMS nobody does, so resume locally once
+-- enough data is buffered (as Standalone Radio does). Call periodically.
+local DECODE_UNDERRUN_BIT = 2  -- bit 1 of audioState
+
+function recover(self)
+    local playback = self.playback
+    if not playback then self.underrunRecovered = false; return end
+    local ok, status = pcall(function() return decode:status() end)
+    if not ok or type(status) ~= "table" then return end
+    local audioUnderrun = math.floor((tonumber(status.audioState) or 0) / DECODE_UNDERRUN_BIT) % 2 == 1
+    if not audioUnderrun and not playback.sentOutputUnderrunEvent then
+        self.underrunRecovered = false
+        return
+    end
+    local threshold = tonumber(playback.decodeThreshold) or 2048
+    if not self.underrunRecovered and (tonumber(status.decodeFull) or 0) > threshold then
+        decode:resumeAudio()
+        self.underrunRecovered = true
+    end
 end
 
 function stop(self)

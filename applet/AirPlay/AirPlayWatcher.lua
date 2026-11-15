@@ -94,6 +94,8 @@ function Watcher:tick()
         if not ok then self:_warn("Now Playing update failed: ", err) end
     end
 
+    if self.active and self.playback.recover then self.playback:recover() end
+
     if d.stopped and self.active then
         self.active = false
         self.playback:stop()
