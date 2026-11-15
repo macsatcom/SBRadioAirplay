@@ -1,0 +1,234 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake-3.28/Modules/CMakeDetermineSystem.cmake:228 (message)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      The target system is: Linux -  - arm
+      The host system is: Linux - 6.14.0-37-generic - x86_64
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/usr/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/usr/share/cmake-3.28/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler: /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/arm-buildroot-linux-musleabi-gcc 
+      Build flags: -Os;-marm;-march=armv6;-mtune=arm1136jf-s;-mfloat-abi=soft;-ffunction-sections;-fdata-sections
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.out"
+      
+      The C compiler identification is GNU, found in:
+        /home/ksn/git-ksn/SBRadioAirplay/build/fab4/CMakeFiles/3.28.3/CompilerIdC/a.out
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:57 (try_compile)"
+      - "/usr/share/cmake-3.28/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "/home/ksn/git-ksn/SBRadioAirplay/build/fab4/CMakeFiles/CMakeScratch/TryCompile-OxmCzi"
+      binary: "/home/ksn/git-ksn/SBRadioAirplay/build/fab4/CMakeFiles/CMakeScratch/TryCompile-OxmCzi"
+    cmakeVariables:
+      CMAKE_C_FLAGS: "-Os -marm -march=armv6 -mtune=arm1136jf-s -mfloat-abi=soft -ffunction-sections -fdata-sections"
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: "-static -no-pie -Wl,--gc-sections"
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/home/ksn/git-ksn/SBRadioAirplay/build/fab4/CMakeFiles/CMakeScratch/TryCompile-OxmCzi'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_aaaa4/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_aaaa4.dir/build.make CMakeFiles/cmTC_aaaa4.dir/build
+        gmake[1]: Entering directory '/home/ksn/git-ksn/SBRadioAirplay/build/fab4/CMakeFiles/CMakeScratch/TryCompile-OxmCzi'
+        Building C object CMakeFiles/cmTC_aaaa4.dir/CMakeCCompilerABI.c.o
+        /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/arm-buildroot-linux-musleabi-gcc   -Os -marm -march=armv6 -mtune=arm1136jf-s -mfloat-abi=soft -ffunction-sections -fdata-sections    -v -o CMakeFiles/cmTC_aaaa4.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake-3.28/Modules/CMakeCCompilerABI.c
+        Using built-in specs.
+        COLLECT_GCC=/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/arm-buildroot-linux-musleabi-gcc.br_real
+        Target: arm-buildroot-linux-musleabi
+        Configured with: ./configure --prefix=/opt/armv5-eabi--musl--stable-2020.02-2 --sysconfdir=/opt/armv5-eabi--musl--stable-2020.02-2/etc --enable-static --target=arm-buildroot-linux-musleabi --with-sysroot=/opt/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot --enable-__cxa_atexit --with-gnu-ld --disable-libssp --disable-multilib --disable-decimal-float --with-gmp=/opt/armv5-eabi--musl--stable-2020.02-2 --with-mpc=/opt/armv5-eabi--musl--stable-2020.02-2 --with-mpfr=/opt/armv5-eabi--musl--stable-2020.02-2 --with-pkgversion='Buildroot 2020.02-00011-g7ea8a52' --with-bugurl=http://bugs.buildroot.net/ --disable-libmpx --disable-libquadmath --disable-libsanitizer --enable-tls --enable-threads --without-isl --without-cloog --with-float=soft --with-abi=aapcs-linux --with-cpu=arm926ej-s --with-float=soft --with-mode=arm --enable-languages=c,c++ --with-build-time-tools=/opt/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/bin --enable-shared --disable-libgomp
+        Thread model: posix
+        gcc version 8.4.0 (Buildroot 2020.02-00011-g7ea8a52) 
+        COLLECT_GCC_OPTIONS='-Os' '-marm'  '-mtune=arm1136jf-s' '-mfloat-abi=soft' '-ffunction-sections' '-fdata-sections' '-v' '-o' 'CMakeFiles/cmTC_aaaa4.dir/CMakeCCompilerABI.c.o' '-c' '-mabi=aapcs-linux' '-mtls-dialect=gnu' '-march=armv6'
+         /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../libexec/gcc/arm-buildroot-linux-musleabi/8.4.0/cc1 -quiet -v -iprefix /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/ -isysroot /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot /usr/share/cmake-3.28/Modules/CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -marm -mtune=arm1136jf-s -mfloat-abi=soft -mabi=aapcs-linux -mtls-dialect=gnu -march=armv6 -auxbase-strip CMakeFiles/cmTC_aaaa4.dir/CMakeCCompilerABI.c.o -Os -version -ffunction-sections -fdata-sections -o /tmp/ccCengjL.s
+        GNU C17 (Buildroot 2020.02-00011-g7ea8a52) version 8.4.0 (arm-buildroot-linux-musleabi)
+        	compiled by GNU C version 4.9.2, GMP version 6.1.2, MPFR version 4.0.2, MPC version 1.1.0, isl version none
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        ignoring nonexistent directory "/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/usr/local/include"
+        ignoring duplicate directory "/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/../../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/../../../../arm-buildroot-linux-musleabi/include"
+        ignoring duplicate directory "/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/../../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/include"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/../../../../arm-buildroot-linux-musleabi/include
+         /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/include
+         /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/usr/include
+        End of search list.
+        GNU C17 (Buildroot 2020.02-00011-g7ea8a52) version 8.4.0 (arm-buildroot-linux-musleabi)
+        	compiled by GNU C version 4.9.2, GMP version 6.1.2, MPFR version 4.0.2, MPC version 1.1.0, isl version none
+        GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+        Compiler executable checksum: 552647793e675d9160d507ae8e9a6cf7
+        COLLECT_GCC_OPTIONS='-Os' '-marm'  '-mtune=arm1136jf-s' '-mfloat-abi=soft' '-ffunction-sections' '-fdata-sections' '-v' '-o' 'CMakeFiles/cmTC_aaaa4.dir/CMakeCCompilerABI.c.o' '-c' '-mabi=aapcs-linux' '-mtls-dialect=gnu' '-march=armv6'
+         /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/../../../../arm-buildroot-linux-musleabi/bin/as -v -march=armv6 -mfloat-abi=soft -meabi=5 -o CMakeFiles/cmTC_aaaa4.dir/CMakeCCompilerABI.c.o /tmp/ccCengjL.s
+        GNU assembler version 2.32 (arm-buildroot-linux-musleabi) using BFD version (GNU Binutils) 2.32
+        COMPILER_PATH=/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../libexec/gcc/arm-buildroot-linux-musleabi/8.4.0/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../libexec/gcc/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/../../../../arm-buildroot-linux-musleabi/bin/
+        LIBRARY_PATH=/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/../../../../arm-buildroot-linux-musleabi/lib/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/usr/lib/
+        COLLECT_GCC_OPTIONS='-Os' '-marm'  '-mtune=arm1136jf-s' '-mfloat-abi=soft' '-ffunction-sections' '-fdata-sections' '-v' '-o' 'CMakeFiles/cmTC_aaaa4.dir/CMakeCCompilerABI.c.o' '-c' '-mabi=aapcs-linux' '-mtls-dialect=gnu' '-march=armv6'
+        Linking C executable cmTC_aaaa4
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_aaaa4.dir/link.txt --verbose=1
+        /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/arm-buildroot-linux-musleabi-gcc -Os -marm -march=armv6 -mtune=arm1136jf-s -mfloat-abi=soft -ffunction-sections -fdata-sections  -static -no-pie -Wl,--gc-sections -v CMakeFiles/cmTC_aaaa4.dir/CMakeCCompilerABI.c.o -o cmTC_aaaa4 
+        Using built-in specs.
+        COLLECT_GCC=/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/arm-buildroot-linux-musleabi-gcc.br_real
+        COLLECT_LTO_WRAPPER=/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../libexec/gcc/arm-buildroot-linux-musleabi/8.4.0/lto-wrapper
+        Target: arm-buildroot-linux-musleabi
+        Configured with: ./configure --prefix=/opt/armv5-eabi--musl--stable-2020.02-2 --sysconfdir=/opt/armv5-eabi--musl--stable-2020.02-2/etc --enable-static --target=arm-buildroot-linux-musleabi --with-sysroot=/opt/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot --enable-__cxa_atexit --with-gnu-ld --disable-libssp --disable-multilib --disable-decimal-float --with-gmp=/opt/armv5-eabi--musl--stable-2020.02-2 --with-mpc=/opt/armv5-eabi--musl--stable-2020.02-2 --with-mpfr=/opt/armv5-eabi--musl--stable-2020.02-2 --with-pkgversion='Buildroot 2020.02-00011-g7ea8a52' --with-bugurl=http://bugs.buildroot.net/ --disable-libmpx --disable-libquadmath --disable-libsanitizer --enable-tls --enable-threads --without-isl --without-cloog --with-float=soft --with-abi=aapcs-linux --with-cpu=arm926ej-s --with-float=soft --with-mode=arm --enable-languages=c,c++ --with-build-time-tools=/opt/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/bin --enable-shared --disable-libgomp
+        Thread model: posix
+        gcc version 8.4.0 (Buildroot 2020.02-00011-g7ea8a52) 
+        COMPILER_PATH=/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../libexec/gcc/arm-buildroot-linux-musleabi/8.4.0/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../libexec/gcc/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/../../../../arm-buildroot-linux-musleabi/bin/
+        LIBRARY_PATH=/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/../../../../arm-buildroot-linux-musleabi/lib/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/usr/lib/
+        COLLECT_GCC_OPTIONS='-Os' '-marm'  '-mtune=arm1136jf-s' '-mfloat-abi=soft' '-ffunction-sections' '-fdata-sections' '-static' '-no-pie' '-v' '-o' 'cmTC_aaaa4' '-mabi=aapcs-linux' '-mtls-dialect=gnu' '-march=armv6'
+         /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../libexec/gcc/arm-buildroot-linux-musleabi/8.4.0/collect2 -plugin /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../libexec/gcc/arm-buildroot-linux-musleabi/8.4.0/liblto_plugin.so -plugin-opt=/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../libexec/gcc/arm-buildroot-linux-musleabi/8.4.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccdcAC1b.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_eh -plugin-opt=-pass-through=-lc --sysroot=/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot -Bstatic -X -m armelf_linux_eabi -o cmTC_aaaa4 /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib/crt1.o /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib/crti.o /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/crtbeginT.o -L/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0 -L/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc -L/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/../../../../arm-buildroot-linux-musleabi/lib -L/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib -L/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/usr/lib --gc-sections CMakeFiles/cmTC_aaaa4.dir/CMakeCCompilerABI.c.o --start-group -lgcc -lgcc_eh -lc --end-group /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/crtend.o /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib/crtn.o
+        COLLECT_GCC_OPTIONS='-Os' '-marm'  '-mtune=arm1136jf-s' '-mfloat-abi=soft' '-ffunction-sections' '-fdata-sections' '-static' '-no-pie' '-v' '-o' 'cmTC_aaaa4' '-mabi=aapcs-linux' '-mtls-dialect=gnu' '-march=armv6'
+        gmake[1]: Leaving directory '/home/ksn/git-ksn/SBRadioAirplay/build/fab4/CMakeFiles/CMakeScratch/TryCompile-OxmCzi'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:127 (message)"
+      - "/usr/share/cmake-3.28/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Parsed C implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/../../../../arm-buildroot-linux-musleabi/include]
+          add: [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/include]
+          add: [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/usr/include]
+        end of search list found
+        collapse include dir [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/../../../../arm-buildroot-linux-musleabi/include] ==> [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/include]
+        collapse include dir [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/include] ==> [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/lib/gcc/arm-buildroot-linux-musleabi/8.4.0/include]
+        collapse include dir [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/usr/include] ==> [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/usr/include]
+        implicit include dirs: [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/include;/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/lib/gcc/arm-buildroot-linux-musleabi/8.4.0/include;/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/usr/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:159 (message)"
+      - "/usr/share/cmake-3.28/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Parsed C implicit link information:
+        link line regex: [^( *|.*[/\\])(arm-buildroot-linux-musleabi-ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        ignore line: [Change Dir: '/home/ksn/git-ksn/SBRadioAirplay/build/fab4/CMakeFiles/CMakeScratch/TryCompile-OxmCzi']
+        ignore line: []
+        ignore line: [Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_aaaa4/fast]
+        ignore line: [/usr/bin/gmake  -f CMakeFiles/cmTC_aaaa4.dir/build.make CMakeFiles/cmTC_aaaa4.dir/build]
+        ignore line: [gmake[1]: Entering directory '/home/ksn/git-ksn/SBRadioAirplay/build/fab4/CMakeFiles/CMakeScratch/TryCompile-OxmCzi']
+        ignore line: [Building C object CMakeFiles/cmTC_aaaa4.dir/CMakeCCompilerABI.c.o]
+        ignore line: [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/arm-buildroot-linux-musleabi-gcc   -Os -marm -march=armv6 -mtune=arm1136jf-s -mfloat-abi=soft -ffunction-sections -fdata-sections    -v -o CMakeFiles/cmTC_aaaa4.dir/CMakeCCompilerABI.c.o -c /usr/share/cmake-3.28/Modules/CMakeCCompilerABI.c]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/arm-buildroot-linux-musleabi-gcc.br_real]
+        ignore line: [Target: arm-buildroot-linux-musleabi]
+        ignore line: [Configured with: ./configure --prefix=/opt/armv5-eabi--musl--stable-2020.02-2 --sysconfdir=/opt/armv5-eabi--musl--stable-2020.02-2/etc --enable-static --target=arm-buildroot-linux-musleabi --with-sysroot=/opt/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot --enable-__cxa_atexit --with-gnu-ld --disable-libssp --disable-multilib --disable-decimal-float --with-gmp=/opt/armv5-eabi--musl--stable-2020.02-2 --with-mpc=/opt/armv5-eabi--musl--stable-2020.02-2 --with-mpfr=/opt/armv5-eabi--musl--stable-2020.02-2 --with-pkgversion='Buildroot 2020.02-00011-g7ea8a52' --with-bugurl=http://bugs.buildroot.net/ --disable-libmpx --disable-libquadmath --disable-libsanitizer --enable-tls --enable-threads --without-isl --without-cloog --with-float=soft --with-abi=aapcs-linux --with-cpu=arm926ej-s --with-float=soft --with-mode=arm --enable-languages=c,c++ --with-build-time-tools=/opt/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/bin --enable-shared --disable-libgomp]
+        ignore line: [Thread model: posix]
+        ignore line: [gcc version 8.4.0 (Buildroot 2020.02-00011-g7ea8a52) ]
+        ignore line: [COLLECT_GCC_OPTIONS='-Os' '-marm'  '-mtune=arm1136jf-s' '-mfloat-abi=soft' '-ffunction-sections' '-fdata-sections' '-v' '-o' 'CMakeFiles/cmTC_aaaa4.dir/CMakeCCompilerABI.c.o' '-c' '-mabi=aapcs-linux' '-mtls-dialect=gnu' '-march=armv6']
+        ignore line: [ /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../libexec/gcc/arm-buildroot-linux-musleabi/8.4.0/cc1 -quiet -v -iprefix /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/ -isysroot /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot /usr/share/cmake-3.28/Modules/CMakeCCompilerABI.c -quiet -dumpbase CMakeCCompilerABI.c -marm -mtune=arm1136jf-s -mfloat-abi=soft -mabi=aapcs-linux -mtls-dialect=gnu -march=armv6 -auxbase-strip CMakeFiles/cmTC_aaaa4.dir/CMakeCCompilerABI.c.o -Os -version -ffunction-sections -fdata-sections -o /tmp/ccCengjL.s]
+        ignore line: [GNU C17 (Buildroot 2020.02-00011-g7ea8a52) version 8.4.0 (arm-buildroot-linux-musleabi)]
+        ignore line: [	compiled by GNU C version 4.9.2  GMP version 6.1.2  MPFR version 4.0.2  MPC version 1.1.0  isl version none]
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [ignoring nonexistent directory "/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/usr/local/include"]
+        ignore line: [ignoring duplicate directory "/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/../../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/../../../../arm-buildroot-linux-musleabi/include"]
+        ignore line: [ignoring duplicate directory "/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/../../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/include"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/../../../../arm-buildroot-linux-musleabi/include]
+        ignore line: [ /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/include]
+        ignore line: [ /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/usr/include]
+        ignore line: [End of search list.]
+        ignore line: [GNU C17 (Buildroot 2020.02-00011-g7ea8a52) version 8.4.0 (arm-buildroot-linux-musleabi)]
+        ignore line: [	compiled by GNU C version 4.9.2  GMP version 6.1.2  MPFR version 4.0.2  MPC version 1.1.0  isl version none]
+        ignore line: [GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072]
+        ignore line: [Compiler executable checksum: 552647793e675d9160d507ae8e9a6cf7]
+        ignore line: [COLLECT_GCC_OPTIONS='-Os' '-marm'  '-mtune=arm1136jf-s' '-mfloat-abi=soft' '-ffunction-sections' '-fdata-sections' '-v' '-o' 'CMakeFiles/cmTC_aaaa4.dir/CMakeCCompilerABI.c.o' '-c' '-mabi=aapcs-linux' '-mtls-dialect=gnu' '-march=armv6']
+        ignore line: [ /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/../../../../arm-buildroot-linux-musleabi/bin/as -v -march=armv6 -mfloat-abi=soft -meabi=5 -o CMakeFiles/cmTC_aaaa4.dir/CMakeCCompilerABI.c.o /tmp/ccCengjL.s]
+        ignore line: [GNU assembler version 2.32 (arm-buildroot-linux-musleabi) using BFD version (GNU Binutils) 2.32]
+        ignore line: [COMPILER_PATH=/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../libexec/gcc/arm-buildroot-linux-musleabi/8.4.0/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../libexec/gcc/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/../../../../arm-buildroot-linux-musleabi/bin/]
+        ignore line: [LIBRARY_PATH=/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/../../../../arm-buildroot-linux-musleabi/lib/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-Os' '-marm'  '-mtune=arm1136jf-s' '-mfloat-abi=soft' '-ffunction-sections' '-fdata-sections' '-v' '-o' 'CMakeFiles/cmTC_aaaa4.dir/CMakeCCompilerABI.c.o' '-c' '-mabi=aapcs-linux' '-mtls-dialect=gnu' '-march=armv6']
+        ignore line: [Linking C executable cmTC_aaaa4]
+        ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_aaaa4.dir/link.txt --verbose=1]
+        ignore line: [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/arm-buildroot-linux-musleabi-gcc -Os -marm -march=armv6 -mtune=arm1136jf-s -mfloat-abi=soft -ffunction-sections -fdata-sections  -static -no-pie -Wl --gc-sections -v CMakeFiles/cmTC_aaaa4.dir/CMakeCCompilerABI.c.o -o cmTC_aaaa4 ]
+        ignore line: [Using built-in specs.]
+        ignore line: [COLLECT_GCC=/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/arm-buildroot-linux-musleabi-gcc.br_real]
+        ignore line: [COLLECT_LTO_WRAPPER=/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../libexec/gcc/arm-buildroot-linux-musleabi/8.4.0/lto-wrapper]
+        ignore line: [Target: arm-buildroot-linux-musleabi]
+        ignore line: [Configured with: ./configure --prefix=/opt/armv5-eabi--musl--stable-2020.02-2 --sysconfdir=/opt/armv5-eabi--musl--stable-2020.02-2/etc --enable-static --target=arm-buildroot-linux-musleabi --with-sysroot=/opt/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot --enable-__cxa_atexit --with-gnu-ld --disable-libssp --disable-multilib --disable-decimal-float --with-gmp=/opt/armv5-eabi--musl--stable-2020.02-2 --with-mpc=/opt/armv5-eabi--musl--stable-2020.02-2 --with-mpfr=/opt/armv5-eabi--musl--stable-2020.02-2 --with-pkgversion='Buildroot 2020.02-00011-g7ea8a52' --with-bugurl=http://bugs.buildroot.net/ --disable-libmpx --disable-libquadmath --disable-libsanitizer --enable-tls --enable-threads --without-isl --without-cloog --with-float=soft --with-abi=aapcs-linux --with-cpu=arm926ej-s --with-float=soft --with-mode=arm --enable-languages=c,c++ --with-build-time-tools=/opt/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/bin --enable-shared --disable-libgomp]
+        ignore line: [Thread model: posix]
+        ignore line: [gcc version 8.4.0 (Buildroot 2020.02-00011-g7ea8a52) ]
+        ignore line: [COMPILER_PATH=/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../libexec/gcc/arm-buildroot-linux-musleabi/8.4.0/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../libexec/gcc/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/../../../../arm-buildroot-linux-musleabi/bin/]
+        ignore line: [LIBRARY_PATH=/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/../../../../arm-buildroot-linux-musleabi/lib/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib/:/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/usr/lib/]
+        ignore line: [COLLECT_GCC_OPTIONS='-Os' '-marm'  '-mtune=arm1136jf-s' '-mfloat-abi=soft' '-ffunction-sections' '-fdata-sections' '-static' '-no-pie' '-v' '-o' 'cmTC_aaaa4' '-mabi=aapcs-linux' '-mtls-dialect=gnu' '-march=armv6']
+        link line: [ /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../libexec/gcc/arm-buildroot-linux-musleabi/8.4.0/collect2 -plugin /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../libexec/gcc/arm-buildroot-linux-musleabi/8.4.0/liblto_plugin.so -plugin-opt=/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../libexec/gcc/arm-buildroot-linux-musleabi/8.4.0/lto-wrapper -plugin-opt=-fresolution=/tmp/ccdcAC1b.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_eh -plugin-opt=-pass-through=-lc --sysroot=/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot -Bstatic -X -m armelf_linux_eabi -o cmTC_aaaa4 /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib/crt1.o /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib/crti.o /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/crtbeginT.o -L/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0 -L/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc -L/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/../../../../arm-buildroot-linux-musleabi/lib -L/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib -L/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/usr/lib --gc-sections CMakeFiles/cmTC_aaaa4.dir/CMakeCCompilerABI.c.o --start-group -lgcc -lgcc_eh -lc --end-group /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/crtend.o /home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib/crtn.o]
+          arg [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../libexec/gcc/arm-buildroot-linux-musleabi/8.4.0/collect2] ==> ignore
+          arg [-plugin] ==> ignore
+          arg [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../libexec/gcc/arm-buildroot-linux-musleabi/8.4.0/liblto_plugin.so] ==> ignore
+          arg [-plugin-opt=/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../libexec/gcc/arm-buildroot-linux-musleabi/8.4.0/lto-wrapper] ==> ignore
+          arg [-plugin-opt=-fresolution=/tmp/ccdcAC1b.res] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
+          arg [-plugin-opt=-pass-through=-lgcc_eh] ==> ignore
+          arg [-plugin-opt=-pass-through=-lc] ==> ignore
+          arg [--sysroot=/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot] ==> ignore
+          arg [-Bstatic] ==> search static
+          arg [-X] ==> ignore
+          arg [-m] ==> ignore
+          arg [armelf_linux_eabi] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_aaaa4] ==> ignore
+          arg [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib/crt1.o] ==> obj [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib/crt1.o]
+          arg [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib/crti.o] ==> obj [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib/crti.o]
+          arg [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/crtbeginT.o] ==> obj [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/crtbeginT.o]
+          arg [-L/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0] ==> dir [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0]
+          arg [-L/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc] ==> dir [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc]
+          arg [-L/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/../../../../arm-buildroot-linux-musleabi/lib] ==> dir [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/../../../../arm-buildroot-linux-musleabi/lib]
+          arg [-L/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib] ==> dir [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib]
+          arg [-L/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/usr/lib] ==> dir [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/usr/lib]
+          arg [--gc-sections] ==> ignore
+          arg [CMakeFiles/cmTC_aaaa4.dir/CMakeCCompilerABI.c.o] ==> ignore
+          arg [--start-group] ==> ignore
+          arg [-lgcc] ==> lib [gcc]
+          arg [-lgcc_eh] ==> lib [gcc_eh]
+          arg [-lc] ==> lib [c]
+          arg [--end-group] ==> ignore
+          arg [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/crtend.o] ==> obj [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/crtend.o]
+          arg [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib/crtn.o] ==> obj [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib/crtn.o]
+        remove lib [gcc_eh]
+        collapse obj [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/crtbeginT.o] ==> [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/lib/gcc/arm-buildroot-linux-musleabi/8.4.0/crtbeginT.o]
+        collapse obj [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/crtend.o] ==> [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/lib/gcc/arm-buildroot-linux-musleabi/8.4.0/crtend.o]
+        collapse library dir [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0] ==> [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/lib/gcc/arm-buildroot-linux-musleabi/8.4.0]
+        collapse library dir [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc] ==> [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/lib/gcc]
+        collapse library dir [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/bin/../lib/gcc/arm-buildroot-linux-musleabi/8.4.0/../../../../arm-buildroot-linux-musleabi/lib] ==> [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/lib]
+        collapse library dir [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib] ==> [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib]
+        collapse library dir [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/usr/lib] ==> [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/usr/lib]
+        implicit libs: [gcc;c]
+        implicit objs: [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib/crt1.o;/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib/crti.o;/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/lib/gcc/arm-buildroot-linux-musleabi/8.4.0/crtbeginT.o;/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/lib/gcc/arm-buildroot-linux-musleabi/8.4.0/crtend.o;/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib/crtn.o]
+        implicit dirs: [/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/lib/gcc/arm-buildroot-linux-musleabi/8.4.0;/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/lib/gcc;/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/lib;/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/lib;/home/ksn/git-ksn/SBRadioAirplay/build/toolchains/armv5-eabi--musl--stable-2020.02-2/arm-buildroot-linux-musleabi/sysroot/usr/lib]
+        implicit fwks: []
+      
+      
+...

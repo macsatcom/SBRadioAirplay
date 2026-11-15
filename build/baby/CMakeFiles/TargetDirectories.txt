@@ -1,0 +1,9 @@
+/home/ksn/git-ksn/SBRadioAirplay/build/baby/CMakeFiles/ar_encoder.dir
+/home/ksn/git-ksn/SBRadioAirplay/build/baby/CMakeFiles/ar_args.dir
+/home/ksn/git-ksn/SBRadioAirplay/build/baby/CMakeFiles/airplay-receiver.dir
+/home/ksn/git-ksn/SBRadioAirplay/build/baby/CMakeFiles/edit_cache.dir
+/home/ksn/git-ksn/SBRadioAirplay/build/baby/CMakeFiles/rebuild_cache.dir
+/home/ksn/git-ksn/SBRadioAirplay/build/baby/CMakeFiles/list_install_components.dir
+/home/ksn/git-ksn/SBRadioAirplay/build/baby/CMakeFiles/install.dir
+/home/ksn/git-ksn/SBRadioAirplay/build/baby/CMakeFiles/install/local.dir
+/home/ksn/git-ksn/SBRadioAirplay/build/baby/CMakeFiles/install/strip.dir
