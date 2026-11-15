@@ -11,6 +11,7 @@ playback = {
 }
 player = {playback=playback,
   volumeLocal=function(self, v, a, b) rec('volumeLocal', v, a, b) end,
+  volume=function(self, v, send) rec('volume', v, send) end,
   incrementSequenceNumber=function(self) rec('incSeq') end}
 localPlayer = player
 package.loaded['jive.slim.Player'] = {
@@ -67,27 +68,28 @@ def test_start_without_player_fails(lua, pb):
 def test_volume_zero_mutes(lua, pb):
     pb.start(pb, "127.0.0.1", 6069)
     assert pb.setRemoteVolume(pb, 0) is True
-    assert calls(lua, "volumeLocal") == [[0, True, True]]
-    assert calls(lua, "audioGain") == [[0, 0]]
+    assert calls(lua, "volume") == [[0, True]]
 
 
-def test_volume_uses_firmware_curve(lua, pb):
+def test_volume_goes_through_player_like_the_knob(lua, pb):
+    # Must tell the server (send=true); a state-only local change gets
+    # overridden by the server's stored volume (silent playback on the Radio).
     pb.start(pb, "127.0.0.1", 6069)
     assert pb.setRemoteVolume(pb, 50) is True
-    assert calls(lua, "volumeLocal") == [[50, True, True]]
-    assert calls(lua, "audioGain") == [[50000, 50000]]
+    assert calls(lua, "volume") == [[50, True]]
+    assert calls(lua, "volumeLocal") == []
 
 
 def test_volume_clamped(lua, pb):
     pb.start(pb, "127.0.0.1", 6069)
     pb.setRemoteVolume(pb, 140)
-    assert calls(lua, "volumeLocal")[-1][0] == 100
+    assert calls(lua, "volume")[-1][0] == 100
 
 
 def test_volume_before_start_is_remembered_and_applied(lua, pb):
     assert pb.setRemoteVolume(pb, 30) is False
     pb.start(pb, "127.0.0.1", 6069)
-    assert calls(lua, "volumeLocal") == [[30, True, True]]
+    assert calls(lua, "volume") == [[30, True]]
 
 
 def test_stop_once(lua, pb):
@@ -112,4 +114,4 @@ def test_airplay_volume_follows_decibels(lua, pb, airplay, percent):
     lua(CURVE)
     pb.start(pb, "127.0.0.1", 6069)
     assert pb.setAirPlayVolume(pb, airplay) is True
-    assert calls(lua, "volumeLocal")[-1][0] == percent
+    assert calls(lua, "volume")[-1][0] == percent
