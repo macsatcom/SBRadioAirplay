@@ -345,5 +345,7 @@ docs/                     design specs, plans, device test results, install note
 - **Install channel:** [SB Radio Applets](https://github.com/macsatcom/SBRadio)
   plugin for Lyrion Music Server.
 
-The applet's own licence is still to be decided. Because the receiver binary
-statically links wolfSSL, the binary as distributed is subject to the GPLv2.
+This project is licensed under the **GNU General Public License v2.0** (see
+[LICENSE](LICENSE)), matching wolfSSL, which is statically linked into the
+receiver binary. Third-party components keep their own licences (MIT for
+libraop and the parts adapted from Spotify Connect).

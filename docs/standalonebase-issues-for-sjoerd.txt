@@ -122,6 +122,6 @@ Related observations (lower confidence)
 
 Happy to share logs or test a fix on my Radio, and to share the AirPlay
 applet code if it's useful to you (the receiver is based on philippe44's
-libraop; licence for the applet still to be decided).
+libraop; the project is GPL-2.0).
 
 Kind regards,
