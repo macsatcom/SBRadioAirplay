@@ -113,11 +113,6 @@ this project. Lyrion is only needed if you install through Option A.
 
 ### Option A: SB Radio Applets plugin for Lyrion Music Server
 
-> **Planned.** The [SB Radio Applets](https://github.com/macsatcom/SBRadio) plugin
-> currently offers Standalone Base, Standalone Radio and Spotify Connect.
-> AirPlay will be added to its catalog. Until then, use
-> [Option B](#option-b-manual-install-over-ssh).
-
 The Radio's Applet Installer can only download over plain HTTP, and GitHub only
 serves HTTPS. The SB Radio Applets plugin lets your Lyrion Music Server (LMS)
 download the applets from GitHub, check their checksums, and offer them to the
@@ -154,7 +149,7 @@ troubleshooting and a plugin-free mirror alternative are in the
 
 ### Option B: Manual install over SSH
 
-This works today and needs no Lyrion server.
+This needs no Lyrion server.
 
 **1. Get the package** for your device, from a release or by
 [building it yourself](#building-from-source):
