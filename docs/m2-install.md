@@ -38,21 +38,24 @@ fine.
 
 ## What to check
 
+Results: Squeezebox Radio, SqueezeOS 9.0.1, Standalone Base as server.
+
+
 | Check | Result |
 |---|---|
-| Home menu shows **AirPlay**; State: running | |
-| `ps` shows `airplay-receiver`; `/tmp/airplay/state` says `stopped` | |
-| iPhone lists "Squeezebox Radio-XX" | |
-| Playing from the iPhone comes out of the Radio speaker | |
-| Now Playing screen opens with title/artist/album | |
-| iPhone volume slider changes Radio volume | |
-| Pause → resume from iPhone resumes audio | |
-| Skip track → new track plays, Now Playing updates | |
-| Switch iPhone to another speaker → Radio stops, Now Playing released | |
-| Start a Standalone Radio station while AirPlay plays → radio takes over | |
-| Start AirPlay while Spotify plays → AirPlay takes over | |
-| Operating Mode Disabled → speaker disappears from the iPhone | |
-| `kill` the receiver → it is back within ~10 s | |
+| Home menu shows **AirPlay**; State: running | ✅ 2026-11-16 Radio |
+| `ps` shows `airplay-receiver`; `/tmp/airplay/state` says `stopped` | ✅ |
+| iPhone lists "Squeezebox Radio-XX" | ✅ (after `.local` hostname fix) |
+| Playing from the iPhone comes out of the Radio speaker | ✅ (after ownership + underrun-resume fixes) |
+| Now Playing screen opens with title/artist/album | ✅ |
+| iPhone volume slider changes Radio volume | ✅ (after dB lookup-table fix) |
+| Pause → resume from iPhone resumes audio | ✅ |
+| Skip track → new track plays, Now Playing updates | ✅ |
+| Switch iPhone to another speaker → Radio stops, Now Playing released | ✅ |
+| Start a Standalone Radio station while AirPlay plays → radio takes over | n/a (Standalone Radio not installed) |
+| Start AirPlay while Spotify plays → AirPlay takes over | not tested |
+| Operating Mode Disabled → speaker disappears from the iPhone | ✅ |
+| `kill` the receiver → it is back within ~10 s | ✅ (2 s) |
 
 Useful while testing (read-only):
 
