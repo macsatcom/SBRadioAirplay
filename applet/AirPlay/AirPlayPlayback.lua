@@ -5,7 +5,10 @@ local Player = require("jive.slim.Player")
 local decode = require("squeezeplay.decode")
 local Stream = require("squeezeplay.stream")
 local string, math = require("string"), require("math")
-local pcall, type, tonumber = pcall, type, tonumber
+local pcall, type, tonumber, tostring = pcall, type, tonumber, tostring
+local okLog, Log = pcall(require, "jive.utils.log")
+local log = okLog and Log.logger("applet.AirPlay") or nil
+local function info(...) if log then log:info(...) end end
 
 module(...)
 oo.class(_M)
@@ -69,9 +72,13 @@ end
 -- percent 0..100. Before start the value is remembered and applied on start.
 function setRemoteVolume(self, percent)
     self.remoteVolume = math.max(0, math.min(100, math.floor(percent)))
-    if not self.playback then return false end
+    if not self.playback then info("AirPlay volume ", self.remoteVolume, " deferred: not playing"); return false end
     local player = Player:getLocalPlayer()
-    if not player or player.playback ~= self.playback then return false end
+    if not player or player.playback ~= self.playback then
+        info("AirPlay volume ", self.remoteVolume, " not applied: local player changed")
+        return false
+    end
+    info("AirPlay volume ", self.remoteVolume, " applied")
     -- Same path as the volume knob: sets the gain and stores the value on the
     -- server. The server's stored volume is what SqueezePlay's periodic
     -- refresh re-applies, so it must be ours. (AirPlayOwnership prevents the
@@ -83,6 +90,7 @@ end
 -- AirPlay volume (0..1, linear in dB over -30..0, 0 = mute) -> the Radio
 -- volume step whose firmware gain is closest to that dB level.
 function setAirPlayVolume(self, airplay)
+    info("AirPlay volume level ", tostring(airplay))
     if not airplay or airplay <= 0 then return self:setRemoteVolume(0) end
     local playback = self.playback
     if not playback then
