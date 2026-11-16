@@ -72,11 +72,11 @@ function setRemoteVolume(self, percent)
     if not self.playback then return false end
     local player = Player:getLocalPlayer()
     if not player or player.playback ~= self.playback then return false end
-    -- Local only, like Spotify Connect: AirPlayOwnership keeps the server's
-    -- volume commands away while AirPlay plays.
-    player:volumeLocal(self.remoteVolume, true, true)
-    local gain = self.remoteVolume == 0 and 0 or self.playback:_getGainFromVolume(self.remoteVolume)
-    decode:audioGain(gain, gain)
+    -- Same path as the volume knob: sets the gain and stores the value on the
+    -- server. The server's stored volume is what SqueezePlay's periodic
+    -- refresh re-applies, so it must be ours. (AirPlayOwnership prevents the
+    -- refresh storm this used to cause.)
+    player:volume(self.remoteVolume, true)
     return true
 end
 

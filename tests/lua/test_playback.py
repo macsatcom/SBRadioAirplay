@@ -70,18 +70,17 @@ def test_start_without_player_fails(lua, pb):
 def test_volume_zero_mutes(lua, pb):
     pb.start(pb, "127.0.0.1", 6069)
     assert pb.setRemoteVolume(pb, 0) is True
-    assert calls(lua, "volumeLocal") == [[0, True, True]]
-    assert calls(lua, "audioGain") == [[0, 0]]
+    assert calls(lua, "volume") == [[0, True]]
 
 
-def test_volume_is_local_not_sent_to_server(lua, pb):
-    # While AirPlay owns the player the server is kept out (AirPlayOwnership),
-    # so volume is applied locally like Spotify Connect does.
+def test_volume_goes_through_player_like_the_knob(lua, pb):
+    # The server (Standalone Base) stores the player's volume and SqueezePlay's
+    # periodic refresh re-applies that stored value; it must be ours, so set it
+    # the way the knob does (gain + tell the server).
     pb.start(pb, "127.0.0.1", 6069)
     assert pb.setRemoteVolume(pb, 50) is True
-    assert calls(lua, "volumeLocal") == [[50, True, True]]
-    assert calls(lua, "audioGain") == [[50000, 50000]]
-    assert calls(lua, "volume") == []
+    assert calls(lua, "volume") == [[50, True]]
+    assert calls(lua, "volumeLocal") == []
 
 
 def test_start_activates_ownership_and_stop_releases(lua, pb):
@@ -94,13 +93,13 @@ def test_start_activates_ownership_and_stop_releases(lua, pb):
 def test_volume_clamped(lua, pb):
     pb.start(pb, "127.0.0.1", 6069)
     pb.setRemoteVolume(pb, 140)
-    assert calls(lua, "volumeLocal")[-1][0] == 100
+    assert calls(lua, "volume")[-1][0] == 100
 
 
 def test_volume_before_start_is_remembered_and_applied(lua, pb):
     assert pb.setRemoteVolume(pb, 30) is False
     pb.start(pb, "127.0.0.1", 6069)
-    assert calls(lua, "volumeLocal") == [[30, True, True]]
+    assert calls(lua, "volume") == [[30, True]]
 
 
 def test_stop_once(lua, pb):
@@ -125,7 +124,7 @@ def test_airplay_volume_follows_decibels(lua, pb, airplay, percent):
     lua(CURVE)
     pb.start(pb, "127.0.0.1", 6069)
     assert pb.setAirPlayVolume(pb, airplay) is True
-    assert calls(lua, "volumeLocal")[-1][0] == percent
+    assert calls(lua, "volume")[-1][0] == percent
 
 
 def set_status(lua, audioState=0, decodeFull=0):
