@@ -157,3 +157,11 @@ def test_recover_when_not_playing_does_nothing(lua, pb):
     set_status(lua, audioState=2, decodeFull=50000)
     pb.recover(pb)
     assert calls(lua, "resumeAudio") == []
+
+
+def test_volume_mapping_does_not_use_fractional_power(lua, pb):
+    # The Radio's Lua returns ~0 for 10 ^ fractional; must not affect mapping.
+    src = open("applet/AirPlay/AirPlayPlayback.lua").read()
+    code = src.split("function setAirPlayVolume")[1].split("function recover")[0]
+    code = "\n".join(l.split("--")[0] for l in code.splitlines())
+    assert "^" not in code and "math.pow" not in code and "math.exp" not in code

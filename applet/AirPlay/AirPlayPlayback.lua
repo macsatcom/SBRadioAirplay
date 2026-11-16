@@ -87,6 +87,10 @@ function setRemoteVolume(self, percent)
     return true
 end
 
+local DB_GAIN = { 65536, 58409, 52057, 46396, 41350, 36854, 32846, 29274, 26090, 23253,
+    20724, 18471, 16462, 14672, 13076, 11654, 10387, 9257, 8250, 7353, 6554, 5841, 5206,
+    4640, 4135, 3685, 3285, 2927, 2609, 2325, 2072 }
+
 -- AirPlay volume (0..1, linear in dB over -30..0, 0 = mute) -> the Radio
 -- volume step whose firmware gain is closest to that dB level.
 function setAirPlayVolume(self, airplay)
@@ -97,13 +101,17 @@ function setAirPlayVolume(self, airplay)
         self.pendingAirPlay = airplay
         return false
     end
-    local target = 65536 * 10 ^ ((math.min(airplay, 1) - 1) * 30 / 20)
+    -- 65536 * 10^(-dB/20) for 0..30 dB. Precomputed: SqueezePlay's Lua on the
+    -- Radio does not evaluate fractional powers (10 ^ x gave ~0, i.e. volume 1).
+    local dB = math.floor((1 - math.min(airplay, 1)) * 30 + 0.5)
+    local target = DB_GAIN[dB + 1]
     local best, bestDiff = 100, math.huge
     for step = 1, 100 do
         local gain = playback:_getGainFromVolume(step)
         local diff = gain and math.abs(gain - target)
         if diff and diff < bestDiff then best, bestDiff = step, diff end
     end
+    info("AirPlay volume ", dB, " dB below max -> step ", best)
     return self:setRemoteVolume(best)
 end
 
