@@ -9,3 +9,5 @@ build/fab4/
 .venv/
 dist/
 __pycache__/
+docs/superpowers/
+docs/standalonebase-issues-for-sjoerd.txt

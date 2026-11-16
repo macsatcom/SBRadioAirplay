@@ -322,7 +322,7 @@ native/airplay-receiver/  receiver front end: main.c, args, PCM/WAV encoder, sta
 patches/                  local changes to libraop
 build/                    fetch, build (host/ARM/wolfSSL), package scripts, CMake toolchain
 tests/                    C unit tests, Lua tests, host/device integration tests
-docs/                     design specs, plans, device test results, install notes
+docs/                     device test results, install notes
 ```
 
 ## Credits and licences
